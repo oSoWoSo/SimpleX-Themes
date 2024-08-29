@@ -13,7 +13,7 @@
 	const config = {
 		sitePath: "/",
 		browserRouter: true,
-		name: "SimpleX-Theme",
+		name: "SimpleX Theme",
 		components: ["docs/navbar", "docs/github"],
 		footers: ["docs/footer"],
 	};
@@ -369,8 +369,13 @@
 		async: true,
 		async walkTokens(token) {
 			if (token.type === 'include') {
+				url = token.url
 				token.url = cwd + cleanPath(token.url)
-				token.html = await renderMD(token.url)
+				try{
+					token.html = await renderMD(token.url)
+				} catch (err) {
+					token.html = `<span class="include-error"><em>Warning!</em> Resource ${url} not found!</span>`;
+				}
 			}
 		}
 	});
