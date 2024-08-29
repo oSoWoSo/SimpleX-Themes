@@ -1,3 +1,4 @@
 - [Home](README.md)
 - [Docs](docs/)
+- [resources](resources/)
 - [Screenshots](screenshots/)
