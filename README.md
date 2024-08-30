@@ -1,3 +1,5 @@
+![logo](docs/logo.svg)
+
 <img src="./resources/SxC_themeBanner.jpg">
 
 _The SimpleX Theme Archive is an independent, community project not affiliated with [SimpleX](https://simplex.chat)_
@@ -16,67 +18,61 @@ Your theme file will be transferred to the Theme Archive and made available for 
 ## Download Themes
 Select a theme to view screenshots and download
 
-	
-<body>
-	<table>
-		<tbody>
-			<tr>
-				<td><a href="./resources/SxC_AMOLEDblackV2_index.md">AMOLED Black</a> <br><a href="./resources/SxC_AMOLEDblackV2_index.md"><img src="./screenshots/SxC_AMOLEDblackV201.jpg" width="80"></a></td>
-				<td><a href="./resources/SxC_binary_index.md">Binary</a> <br><a href="./resources/SxC_binary_index.md"><img src="./screenshots/SxC_binary01.jpg" width="80"></a></td>
-				<td><a href="./resources/SxC_camoCobalt_index.md">Camo Cobalt</a> <br><a href="./resources/SxC_camoCobalt_index.md"><img src="./screenshots/SxC_camoCobalt01.jpg" width="80"></a></td>
-			</tr>
-			<tr>
-				<td><a href="./resources/SxC_camoGreen_index.md">Camo Green</a> <br><a href="./resources/SxC_camoGreen_index.md"><img src="./screenshots/SxC_camoGreen01.jpg" width="80"></a></td>
-				<td><a href="./resources/SxC_camoUrban_index.md">Camo Urban</a> <br><a href="./resources/SxC_camoUrban_index.md"><img src="./screenshots/SxC_camoUrban01.jpg" width="80"></a></td>
-				<td><a href="./resources/SxC_CPN_HackingV2_index.md">CPN Hacking</a> <br><a href="./resources/SxC_CPN_HackingV2_index.md"><img src="./screenshots/SxC_CPN_HackingV201.jpg" width="80"></a></td>
-			</tr>
-			<tr>
-				<td><a href="./resources/SxC_cyan_index.md">Cyan</a> <br><a href="./resources/SxC_cyan_index.md"><img src="./screenshots/SxC_cyan01.jpg" width="80"></a></td>
-				<td><a href="./resources/SxC_dark_index.md">Dark</a> <br><a href="./resources/SxC_dark_index.md"><img src="./screenshots/SxC_dark01.jpg" width="80"></a></td>
-				<td><a href="./resources/SxC_darkGreen_index.md">Dark Green</a> <br><a href="./resources/SxC_darkGreen_index.md"><img src="./screenshots/SxC_darkGreen_screenshot01.png" width="80"></a></td>
-			</tr>
-			<tr>
-				<td><a href="./resources/SxC_electricBlue_index.md">Electric Blue</a> <br><a href="./resources/SxC_electricBlue_index.md"><img src="./screenshots/SxC_ElectricBlue01.jpg" width="80"></a></td>
-				<td><a href="./resources/SxC_green_index.md">Green</a> <br><a href="./resources/SxC_green_index.md"><img src="./screenshots/SxC_green01.jpg" width="80"></a></td>
-				<td><a href="./resources/SxC_IT_Slate_index.md">IT Slate</a> <br><a href="./resources/SxC_IT_Slate_index.md"><img src="./screenshots/SxC_IT_Slate01.jpg" width="80"></a></td>
-			</tr>
-			<tr>
-				<td><a href="./resources/SxC_lazySunday_index.md">Lazy Sunday</a> <br><a href="./resources/SxC_lazySunday_index.md"><img src="./screenshots/SxC_lazySunday01.jpg" width="80"></a></td>
-				<td><a href="./resources/SxC_light_index.md">Light</a> <br><a href="./resources/SxC_light_index.md"><img src="./screenshots/SxC_light01.jpg" width="80"></a></td>
-				<td><a href="./resources/SxC_leaves_index.md">Leaves</a> <br><a href="./resources/SxC_leaves_index.md"><img src="./screenshots/SxC_leaves01.jpg" width="80"></a></td>
-			</tr>
-			<tr>
-				<td><a href="./resources/SxC_Lobster_index.md">Lobster</a> <br><a href="./resources/SxC_Lobster_index.md"><img src="./screenshots/SxC_Lobster01.jpg" width="80"></a></td>
-				<td><a href="./resources/SxC_mocca_index.md">Mocca</a> <br><a href="./resources/SxC_mocca_index.md"><img src="./screenshots/SxC_mocca01.jpg" width="80"></a></td>
-				<td><a href="./resources/SxC_monaLisa_index.md">Mona Lisa</a> <br><a href="./resources/SxC_monaLisa_index.md"><img src="./screenshots/SxC_monaLisa01.jpg" width="80"></a></td>
-			</tr>
-			<tr>
-				<td><a href="./resources/SxC_Nightshade_index.md">Nightshade</a> <br><a href="./resources/SxC_Nightshade_index.md"><img src="./screenshots/SxC_Nightshade01.jpg" width="80"></a></td>
-				<td><a href="./resources/SxC_purple_index.md">Purple</a> <br><a href="./resources/SxC_purple_index.md"><img src="./screenshots/SxC_purple01.jpg" width="80"></a></td>
-				<td><a href="./resources/SxC_red_index.md">Red</a> <br><a href="./resources/SxC_red_index.md"><img src="./screenshots/SxC_red01.jpg" width="80"></a></td>
-			</tr>
-			<tr>
-				<td><a href="./resources/SxC_SessionDark_index.md">Session (dark)</a> <br><a href="./resources/SxC_SessionDark_index.md"><img src="./screenshots/SxC_SessionDark01.jpg" width="80"></a></td>
-				<td><a href="./resources/SxC_The_ShiningV2_index.md)">The Shining v2</a> <br><a href="./resources/SxC_The_ShiningV2_index.md)"><img src="./screenshots/SxC_The_ShiningV201.jpg" width="80"></a></td>
-				<td><a href="./resources/SxC_yellow_index.md">Yellow</a> <br><a href="./resources/SxC_yellow_index.md"><img src="./screenshots/SxC_yellow01.jpg" width="80"></a></td>
-			</tr>
-		</tbody>
-	</table>
+| [AMOLED Black v2](resources/SxC_AMOLEDblackV2_index.md) | 
+| [Binary](resources/SxC_binary_index.md) | 
+| [Camo Cobalt](resources/SxC_camoCobalt_index.md) | 
+| [Camo Green](resources/SxC_camoGreen_index.md) | 
+| [Camo Urban](resources/SxC_camoUrban_index.md) | 
+| [CPN Hacking v2](resources/SxC_CPN_HackingV2_index.md) |
+| [Cyan](resources/SxC_cyan_index.md) | 
+| [Dark](resources/SxC_dark_index.md) | 
+| [Dark Green](resources/SxC_darkGreen_index.md) |
+| [Electric Blue](resources/SxC_electricBlue_index.md) | 
+| [Green](resources/SxC_green_index.md) | 
+| [IT Slate](resources/SxC_IT_Slate_index.md) |
+| [Lazy Sunday](resources/SxC_lazySunday_index.md) | 
+| [Light](resources/SxC_light_index.md) | 
+| [Leaves](resources/SxC_leaves_index.md) |
+| [Lobster](resources/SxC_Lobster_index.md) | 
+| [Mocca](resources/SxC_mocca_index.md) | 
+| [Mona Lisa](resources/SxC_monaLisa_index.md) |
+| [Nightshade](resources/SxC_Nightshade_index.md) | 
+| [Purple](resources/SxC_purple_index.md) | 
+| [Red](resources/SxC_red_index.md) |
+| [Session (dark)](resources/SxC_SessionDark_index.md) | 
+| [The Shining](resources/SxC_The_ShiningV2_index.md) | 
+| [Yellow](resources/SxC_yellow_index.md) |
 
-<!--
-| [AMOLED Black v2](./resources/SxC_AMOLEDblackV2_index.md) | [Binary](./resources/SxC_binary_index.md) | [Camo Cobalt](./resources/SxC_camoCobalt_index.md) |
 
-| [Camo Green](./resources/SxC_camoGreen_index.md) | [Camo Urban](./resources/SxC_camoUrban_index.md) | [CPN Hacking v2](./resources/SxC_CPN_HackingV2_index.md) |
 
-| [Cyan](./resources/SxC_cyan_index.md) | [Dark](./resources/SxC_dark_index.md) | [Dark Green](./resources/SxC_darkGreen_index.md) |
 
-| [Electric Blue](./resources/SxC_electricBlue_index.md) | [Green](./resources/SxC_green_index.md) | [IT Slate](./resources/SxC_IT_Slate_index.md) |
 
-| [Lazy Sunday](./resources/SxC_lazySunday_index.md) | [Light](./resources/SxC_light_index.md) | [Leaves](./resources/SxC_leaves_index.md) |
 
-| [Lobster](./resources/SxC_Lobster_index.md) | [Mocca](./resources/SxC_mocca_index.md) | [Mona Lisa](./resources/SxC_monaLisa_index.md) |
 
-| [Nightshade](./resources/SxC_Nightshade_index.md) | [Purple](./resources/SxC_purple_index.md) | [Red](./resources/SxC_red_index.md) |
 
-| [Session (dark)](./resources/SxC_SessionDark_index.md) | [The Shining](./resources/SxC_The_ShiningV2_index.md) | [Yellow](./resources/SxC_yellow_index.md) |
--->
+# [Raito](https://raito.arnaud.at) - Mini Markdown CMS ✨📝
+> Build your website with a single file!
+
+Raito is an ultralight static CMS/Wiki that weights 8kb.  
+Hence the name, ライト meaning *light* in Japanese.
+
+Made by [Arnaud de Saint Meloir](https://arnaud.at), inspired by the defunct [MDwiki](https://github.com/Dynalon/mdwiki/)
+
+**[🔥 Demo](https://raito.arnaud.at) | [📄 Docs](docs/)**
+
+## Install
+- Copy `index.html` to your website root
+- Write your homepage in `README.md`
+- Every MarkDown file will turn into a page ✨
+
+## Testing
+- Install Node 16+ and Yarn
+- `cd tests`
+- `yarn` to install dependencies
+- `yarn test` to run tests
+- `yarn start` to start the HTTP servers
+- `yarn debug` to debug tests interactively
+
+### Dependencies
+- [Marked.js](https://github.com/markedjs/marked/)
+- [highlight.js](https://github.com/highlightjs/highlight.js/) (Optional)
