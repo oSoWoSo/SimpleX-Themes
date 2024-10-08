@@ -1,27 +1,42 @@
-name: Create envfile
-
-on: [ push ]
-
+# Summary:
+# Tests the example used in README.md, to make sure the example we show is always working.
+#
+# See https://github.com/actions/checkout https://github.com/actions/checkout/releases/tag/v3
+name: 'GitHub Action code snippet'
+on:
+  push:
 jobs:
-
-  count:
-    runs-on: ubuntu-latest
+  # On some job, do some stuff and persist variables meant to be re-used in other jobs
+  compute-data:
+    name: Compute data
+    runs-on: ubuntu-22.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Count themes
+      # Do your own internal business logic...
+      - name: Compute resources
         run: |
-          THEMES_NUMBER=$(ls ./themes/ | wc -l)
-          echo "Themes counted: $THEMES_NUMBER"
-          echo "THEMES_NUMBER=$THEMES_NUMBER" >> $GITHUB_ENV
-      - name: Export one variable
-        uses: UnlyEd/github-action-store-variable@v2.1.0
+          MAGIC_NUMBER=$(ls ./themes/ | wc -l)
+          echo "Number of included themes: $MAGIC_NUMBER"
+          echo "Exporting it as ENV variable..."
+          echo "MAGIC_NUMBER=$MAGIC_NUMBER" >> $GITHUB_ENV
+      # XXX We recommend to export all your variables at once, at the end of your job
+      - name: Export variable MAGIC_NUMBER for next jobs
+        uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
         with:
-          variables: THEMES_NUMBER="$THEMES_NUMBER"
-      - name: Make envfile
-        uses: SpicyPizza/create-envfile@v2.0
+          # Persist (store) our MAGIC_NUMBER ENV variable into our store, for the next jobs
+          variables: |
+            MAGIC_NUMBER=${{ env.MAGIC_NUMBER }}
+  # In another job, read the previously stored variable and use it
+  retrieve-data:
+    name: Find & re-use data
+    runs-on: ubuntu-22.04
+    needs: compute-data
+    steps:
+      - name: Import variable MAGIC_NUMBER
+        uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
         with:
-          envkey_THEMES_NUMBER: ${{ vars.THEMES_NUMBER }}
-          file_name: .env
-          fail_on_empty: true
-          sort_keys: false
+          # List all variables you want to retrieve from the store
+          # XXX They'll be automatically added to your ENV
+          variables: |
+            MAGIC_NUMBER
+      - name: Debug output
+        run: echo "We have access to $MAGIC_NUMBER themes"
