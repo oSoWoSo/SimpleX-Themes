@@ -154,9 +154,10 @@ jobs:
               display = rating.get('display', '')
 
               # Remove any existing popularity tag
-              content = re.sub(r'\n?<p class="theme-popularity">[^\n]*</p>\n?', '\n', content)
+              content = re.sub(r'\n+<p class="theme-popularity">[^\n]*</p>', '', content)
 
               if display:
+                  tag_line = f'<p class="theme-popularity">Popularity: {display}</p>'
                   lines = content.split('\n')
                   new_lines = []
                   title_found = False
@@ -164,9 +165,11 @@ jobs:
                       new_lines.append(line)
                       if not title_found and line.startswith('# ') and i > 0:
                           title_found = True
-                          new_lines.append(f'\n<p class="theme-popularity">Popularity: {display}</p>')
+                          new_lines.append('')
+                          new_lines.append(tag_line)
                   content = '\n'.join(new_lines)
 
+              content = re.sub(r'\n{3,}', '\n\n', content)
               with open(md_file, 'w') as f:
                   f.write(content)
 
@@ -234,8 +237,8 @@ jobs:
               for old_file, old_name in older:
                   with open(old_file, 'r') as f:
                       oc = f.read()
-                  oc = re.sub(r'\n?> \*\*Newer version available:[^\n]*\n?', '', oc)
-                  note = f'\n> **Newer version available:** [{cur_name}]({cur_file.name.replace(".md", ".html")})\n'
+                  oc = re.sub(r'\n+> \*\*Newer version available:[^\n]*', '', oc)
+                  note_line = f'> **Newer version available:** [{cur_name}]({cur_file.name.replace(".md", ".html")})'
                   lines = oc.split('\n')
                   new_lines = []
                   title_found = False
@@ -243,8 +246,10 @@ jobs:
                       new_lines.append(line)
                       if not title_found and line.startswith('# ') and i > 0:
                           title_found = True
-                          new_lines.append(note)
+                          new_lines.append('')
+                          new_lines.append(note_line)
                   oc = '\n'.join(new_lines)
+                  oc = re.sub(r'\n{3,}', '\n\n', oc)
                   with open(old_file, 'w') as f:
                       f.write(oc)
 
