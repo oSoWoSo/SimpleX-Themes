@@ -51,5 +51,4 @@ Wallpaper artwork — _David Haller (Legion on FX)_
 
 Source — _u/st4t1cshock (reddit)_
 
-
 * [Return Home](../)
