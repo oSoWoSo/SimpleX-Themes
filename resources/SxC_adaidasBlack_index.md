@@ -1,25 +1,25 @@
 ---
 layout: default
-giscus: adaidas-blyat
+giscus: adaidas-black
 ---
 ![SxC Theme Archive Banner](../resources/SxC_themeBanner.png)
 
-# Adaidas Blyat 
+# Adaidas Black
 
-* Download [Adaidas Blyat](../themes/SxC_adaidasBlyat.theme)
+* Download [Adaidas Black](../themes/SxC_adaidasBlack.theme)
 
-<a href="../screenshots/SxC_adaidasBlyat01.jpg" target="_blank">
-		<img src="../screenshots/SxC_adaidasBlyat01.jpg" width="120">
+<a href="../screenshots/SxC_adaidasBlack01.jpg" target="_blank">
+		<img src="../screenshots/SxC_adaidasBlack01.jpg" width="120">
 </a>&nbsp;&nbsp;&nbsp;
-<a href="../screenshots/SxC_adaidasBlyat02.jpg" target="_blank">
-		<img src="../screenshots/SxC_adaidasBlyat02.jpg" width="120">
+<a href="../screenshots/SxC_adaidasBlack02.jpg" target="_blank">
+		<img src="../screenshots/SxC_adaidasBlack02.jpg" width="120">
 </a>
 <br>
-<a href="../screenshots/SxC_adaidasBlyat03.jpg" target="_blank">
-		<img src="../screenshots/SxC_adaidasBlyat03.jpg" width="120">
+<a href="../screenshots/SxC_adaidasBlack03.jpg" target="_blank">
+		<img src="../screenshots/SxC_adaidasBlack03.jpg" width="120">
 </a>&nbsp;&nbsp;&nbsp;
-<a href="../screenshots/SxC_adaidasBlyat04.jpg" target="_blank">
-		<img src="../screenshots/SxC_adaidasBlyat04.jpg" width="120">
+<a href="../screenshots/SxC_adaidasBlack04.jpg" target="_blank">
+		<img src="../screenshots/SxC_adaidasBlack04.jpg" width="120">
 </a>
 
 ----
