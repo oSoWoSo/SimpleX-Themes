@@ -47,6 +47,18 @@ background=$(awk '
     }
 ' "$theme_file")
 background=${background:-'#ff101820'}
+tint=$(awk '
+    /^wallpaper:[[:space:]]*$/ { in_wallpaper = 1; next }
+    in_wallpaper && /^[^[:space:]]/ { exit }
+    in_wallpaper && /^[[:space:]]+tint:[[:space:]]*"/ {
+        line = $0
+        sub(/^[[:space:]]+tint:[[:space:]]*"/, "", line)
+        sub(/".*$/, "", line)
+        print line
+        exit
+    }
+' "$theme_file")
+tint=${tint:-'#00ffffff'}
 
 output_dir=${output_file%/*}
 if [[ $output_dir == "$output_file" ]]; then
@@ -56,9 +68,9 @@ mkdir -p -- "$output_dir"
 tmp_uri=$(mktemp)
 tmp_theme=$(mktemp "$output_file.tmp.XXXXXX")
 trap 'rm -f -- "$tmp_uri" "$tmp_theme"' EXIT
-printf 'data:image/png;base64,%s' "$(base64 --wrap=0 < "$wallpaper_file")" > "$tmp_uri"
+printf 'data:image/png;base64,%s' "$(base64 --wrap=0 <"$wallpaper_file")" >"$tmp_uri"
 
-awk -v uri_file="$tmp_uri" -v background="$background" '
+awk -v uri_file="$tmp_uri" -v background="$background" -v tint="$tint" '
     BEGIN {
         getline image_uri < uri_file
         close(uri_file)
@@ -68,7 +80,7 @@ awk -v uri_file="$tmp_uri" -v background="$background" '
         print "  scale: 0.7"
         print "  scaleType: \"repeat\""
         print "  background: \"" background "\""
-        print "  tint: \"#00ffffff\""
+        print "  tint: \"" tint "\""
         print "  image: \"" image_uri "\""
         inserted = 1
     }
@@ -81,7 +93,7 @@ awk -v uri_file="$tmp_uri" -v background="$background" '
     skipping_wallpaper { next }
     { print }
     END { if (!inserted) write_wallpaper() }
-' "$theme_file" > "$tmp_theme"
+' "$theme_file" >"$tmp_theme"
 mv -- "$tmp_theme" "$output_file"
 trap - EXIT
 rm -f -- "$tmp_uri"

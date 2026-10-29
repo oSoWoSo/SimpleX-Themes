@@ -112,7 +112,10 @@ choose a fixed screenshot set instead.
 ### Embedding a custom wallpaper PNG
 
 `wallpapers/linux-tux-pattern.svg` is the editable source for the bundled
-640×640 transparent PNG. Embed it in a copy of a theme with:
+640×640 transparent PNG. Its Tux line art follows the bundled wallpapers'
+pattern style, and embedding preserves the target theme's tint.
+
+Embed it in a copy of a theme with:
 
 ```bash
 scripts/embed_wallpaper.sh \
@@ -121,8 +124,8 @@ scripts/embed_wallpaper.sh \
   themes/SxC_myThemeLinux.theme
 ```
 
-The output preserves the theme palette and wallpaper background, sets the
-wallpaper to repeat, and adds the PNG as a `data:image/png;base64` value.
+The output preserves the theme palette, wallpaper background, and tint, sets
+the wallpaper to repeat, and adds the PNG as a `data:image/png;base64` value.
 The source theme is left unchanged; the script refuses to overwrite its
 output. To recover an embedded PNG later:
 
