@@ -1,0 +1,41 @@
+name: Generate theme previews
+
+on:
+  pull_request:
+    paths:
+      - 'themes/*.theme'
+
+jobs:
+  generate-previews:
+    runs-on: ubuntu-latest
+    env:
+      PREVIEW_TEMPLATE: auto
+    steps:
+      - name: Checkout pull request
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Install ImageMagick
+        run: sudo apt-get update && sudo apt-get install --yes imagemagick
+
+      - name: Generate previews for changed themes
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          output_dir="$RUNNER_TEMP/theme-previews"
+          while IFS= read -r theme_file; do
+            [[ -f "$theme_file" ]] || continue
+            bash scripts/generate_screenshots.sh \
+              "$theme_file" "$PREVIEW_TEMPLATE" "$output_dir"
+          done < <(git diff --name-only --diff-filter=ACMRT \
+            "$BASE_SHA...$HEAD_SHA" -- 'themes/*.theme')
+
+      - name: Upload generated previews
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-theme-previews
+          path: ${{ runner.temp }}/theme-previews/*.jpg
+          if-no-files-found: ignore

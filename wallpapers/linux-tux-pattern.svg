@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+  <defs>
+    <g id="tux" stroke="#101820" stroke-linejoin="round" stroke-width="5">
+      <ellipse cx="80" cy="137" rx="63" ry="91" fill="#18242e" />
+      <path d="M28 137c7-36 28-60 52-60s45 24 52 60c7 38-9 76-52 76s-59-38-52-76Z" fill="#e8edf0" stroke="none" />
+      <path d="M28 113C19 78 27 40 55 25c8-5 17-7 25-7s17 2 25 7c28 15 36 53 27 88-12-23-32-36-52-36s-40 13-52 36Z" fill="#18242e" />
+      <ellipse cx="62" cy="69" rx="11" ry="15" fill="#fff" stroke="none" />
+      <ellipse cx="98" cy="69" rx="11" ry="15" fill="#fff" stroke="none" />
+      <circle cx="66" cy="72" r="5" fill="#101820" stroke="none" />
+      <circle cx="94" cy="72" r="5" fill="#101820" stroke="none" />
+      <path d="M68 91q12-9 24 0l-12 17Z" fill="#ed9b32" />
+      <path d="M20 105C1 120 4 168 23 183c9 7 18 4 22-5l11-31Z" fill="#18242e" />
+      <path d="M140 105c19 15 16 63-3 78-9 7-18 4-22-5l-11-31Z" fill="#18242e" />
+      <path d="M48 211q12-10 25 0l-4 16H43Z" fill="#ed9b32" />
+      <path d="M87 211q13-10 25 0l5 16H91Z" fill="#ed9b32" />
+    </g>
+  </defs>
+  <g opacity="0.72">
+    <use href="#tux" transform="translate(16 10) scale(0.36) rotate(-12 80 120)" />
+    <use href="#tux" transform="translate(230 25) scale(0.58) rotate(8 80 120)" />
+    <use href="#tux" transform="translate(476 18) scale(0.42) rotate(-5 80 120)" />
+    <use href="#tux" transform="translate(80 280) scale(0.56) rotate(7 80 120)" />
+    <use href="#tux" transform="translate(342 264) scale(0.34) rotate(-10 80 120)" />
+    <use href="#tux" transform="translate(470 335) scale(0.66) rotate(9 80 120)" />
+    <use href="#tux" transform="translate(9 492) scale(0.44) rotate(5 80 120)" />
+    <use href="#tux" transform="translate(270 488) scale(0.50) rotate(-7 80 120)" />
+  </g>
+</svg>

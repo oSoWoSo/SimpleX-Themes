@@ -78,6 +78,60 @@ Each theme needs 4 screenshots (JPG format, 120px width in the index):
 - `SxC_themeName01.jpg`, `SxC_themeName02.jpg`, etc.
 - `SxC_themeName-v101.jpg`, `SxC_themeName-v102.jpg`, etc.
 
+
+### Generate previews from an existing theme
+
+You can reuse screenshots from an existing theme and recolor their opaque
+theme colors:
+
+```bash
+bash scripts/generate_screenshots.sh themes/SxC_yourTheme.theme
+```
+
+The generated files go to `screenshots/` by default. With `auto` (the default),
+the script looks for a screenshot set whose `wallpaper.preset` matches the
+target theme. If the target has no preset, it uses Adaidas Black.
+
+To choose a different pattern explicitly, pass the theme whose screenshots
+contain it:
+
+```bash
+bash scripts/generate_screenshots.sh \
+  themes/SxC_yourTheme.theme \
+  themes/SxC_templateTheme.theme \
+  /tmp/theme-previews
+```
+
+The selected theme must have matching `screenshots/SxC_templateTheme01.jpg`
+through `04.jpg` files. The pattern is taken from those screenshots; the
+script does not extract embedded wallpaper images from `.theme` files. PRs
+that change themes generate previews as a downloadable GitHub Actions artifact.
+The workflow uses `PREVIEW_TEMPLATE=auto` by default; set it to a theme path to
+choose a fixed screenshot set instead.
+
+### Embedding a custom wallpaper PNG
+
+`wallpapers/linux-tux-pattern.svg` is the editable source for the bundled
+640×640 transparent PNG. Embed it in a copy of a theme with:
+
+```bash
+scripts/embed_wallpaper.sh \
+  themes/SxC_myTheme.theme \
+  wallpapers/linux-tux-pattern.png \
+  themes/SxC_myThemeLinux.theme
+```
+
+The output preserves the theme palette and wallpaper background, sets the
+wallpaper to repeat, and adds the PNG as a `data:image/png;base64` value.
+The source theme is left unchanged; the script refuses to overwrite its
+output. To recover an embedded PNG later:
+
+```bash
+scripts/extract_wallpaper.sh themes/SxC_myThemeLinux.theme
+```
+
+The extractor also accepts `data:image/jpg;base64` wallpapers.
+
 ### Taking Screenshots
 
 To take screenshots for your theme:
