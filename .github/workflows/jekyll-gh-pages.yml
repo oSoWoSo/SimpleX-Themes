@@ -3,8 +3,8 @@ name: Deploy Jekyll to GitHub Pages
 on:
   push:
     branches: ["main"]
-    paths:
-      - ! .github/**
+    paths-ignore:
+      - .github/**
   workflow_dispatch:
   #schedule:
     #- cron: '0 */6 * * *'
