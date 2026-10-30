@@ -1,7 +1,6 @@
 name: Check GitHub Actions
 
 on:
-  push:
   schedule:
     - cron: '0 6 * * 1'
   workflow_dispatch:
