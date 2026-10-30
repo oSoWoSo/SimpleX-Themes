@@ -4,11 +4,9 @@ name: Deploy Jekyll with GitHub Pages dependencies preinstalled
 on:
   push:
     branches: ["main"]
-
   workflow_dispatch:
-
-  schedule:
-    - cron: '0 */6 * * *'
+  #schedule:
+    #- cron: '0 */6 * * *'
 
 permissions:
   contents: write
