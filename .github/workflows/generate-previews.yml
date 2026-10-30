@@ -1,6 +1,7 @@
 name: Generate theme previews
 
 on:
+  workflow_dispatch:
   pull_request:
     paths:
       - 'themes/*.theme'
