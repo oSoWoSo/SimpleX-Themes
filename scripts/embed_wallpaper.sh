@@ -68,7 +68,7 @@ mkdir -p -- "$output_dir"
 tmp_uri=$(mktemp)
 tmp_theme=$(mktemp "$output_file.tmp.XXXXXX")
 trap 'rm -f -- "$tmp_uri" "$tmp_theme"' EXIT
-printf 'data:image/png;base64,%s' "$(base64 --wrap=0 <"$wallpaper_file")" >"$tmp_uri"
+printf 'data:image/png;base64,%s' "$(base64 --wrap=0 < "$wallpaper_file")" > "$tmp_uri"
 
 awk -v uri_file="$tmp_uri" -v background="$background" -v tint="$tint" '
     BEGIN {
@@ -93,7 +93,7 @@ awk -v uri_file="$tmp_uri" -v background="$background" -v tint="$tint" '
     skipping_wallpaper { next }
     { print }
     END { if (!inserted) write_wallpaper() }
-' "$theme_file" >"$tmp_theme"
+' "$theme_file" > "$tmp_theme"
 mv -- "$tmp_theme" "$output_file"
 trap - EXIT
 rm -f -- "$tmp_uri"

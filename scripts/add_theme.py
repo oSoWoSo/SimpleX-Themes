@@ -78,6 +78,9 @@ def extract_theme_properties(theme_file_path):
 def generate_index_md(theme_filename, theme_properties):
     """Generate the index.md content for a theme."""
     name, display_name = extract_theme_name(theme_filename)
+    giscus_id = name.lower().replace('+', '-plus')
+    giscus_id = re.sub(r'[^a-z0-9]+', '-', giscus_id).strip('-')
+
     
     # Build theme properties section
     props_text = []
@@ -92,7 +95,10 @@ def generate_index_md(theme_filename, theme_properties):
     if 'wallpaper' in theme_properties:
         props_text.append('wallpaper:')
         for key, value in theme_properties['wallpaper'].items():
-            props_text.append(f'  {key}: "{value}"')
+            if key == 'scale':
+                props_text.append(f'  {key}: {value}')
+            else:
+                props_text.append(f'  {key}: "{value}"')
     
     props_text.append('```')
     
@@ -104,7 +110,11 @@ def generate_index_md(theme_filename, theme_properties):
                                f'        <img src="../screenshots/{screenshot_name}" width="120">\n'
                                f'</a>')
     
-    index_content = f"""![SxC Theme Archive Banner](../resources/SxC_themeBanner.png)
+    index_content = f"""---
+layout: default
+giscus: {giscus_id}
+---
+![SxC Theme Archive Banner](../resources/SxC_themeBanner.png)
 
 # {display_name}
 

@@ -10,9 +10,11 @@ giscus: dark-green-plus
 
 ### Wallpaper preview
 
-<img src="../wallpapers/SxC_darkGreen+_wallpaper-preview.png" alt="Dark Green+ Tux wallpaper pattern" width="320">
+<img src="../screenshots/SxC_darkGreen+_wallpaper.png" alt="Dark Green+ Tux wallpaper pattern" width="320">
 
 The app repeats this Tux pattern and applies the theme's existing green tint.
+
+[Wallpaper source: SVG](../wallpapers/linux-tux-pattern.svg) · [PNG asset](../wallpapers/linux-tux-pattern.png)
 
 ----
 ### Theme Properties

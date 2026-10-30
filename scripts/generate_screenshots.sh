@@ -19,8 +19,8 @@ if [[ ! -f $theme_file ]]; then
 fi
 
 filename=${theme_file##*/}
-if [[ $filename != SxC_*.theme ]]; then
-    printf 'Error: theme filename must start with SxC_ and end with .theme: %s\n' "$filename" >&2
+if [[ $filename != *.theme ]]; then
+    printf 'Error: theme filename must end with .theme: %s\n' "$filename" >&2
     exit 2
 fi
 theme_name=${filename#SxC_}
@@ -46,7 +46,24 @@ read_wallpaper_preset() {
             printf '%s\n' "${BASH_REMATCH[1]}"
             return
         fi
-    done <"$file"
+    done < "$file"
+}
+
+read_wallpaper_field() {
+    local file=$1 field=$2
+
+    awk -v key="$field" '
+        BEGIN { field = key ":" }
+        /^wallpaper:[[:space:]]*$/ { in_wallpaper = 1; next }
+        in_wallpaper && /^[^[:space:]]/ { exit }
+        in_wallpaper && $1 == field {
+            value = $2
+            sub(/^"/, "", value)
+            sub(/"$/, "", value)
+            print value
+            exit
+        }
+    ' "$file"
 }
 
 if [[ $template_arg == auto ]]; then
@@ -80,7 +97,7 @@ if [[ $template_arg == auto ]]; then
             exit 1
         fi
     else
-        template_theme="$repo_root/themes/SxC_adaidasBlack.theme"
+        template_theme="$repo_root/themes/SxC_simplexDefault.theme"
     fi
 else
     template_theme=$template_arg
@@ -92,8 +109,8 @@ if [[ ! -f $template_theme ]]; then
 fi
 
 template_filename=${template_theme##*/}
-if [[ $template_filename != SxC_*.theme ]]; then
-    printf 'Error: template filename must start with SxC_ and end with .theme: %s\n' "$template_filename" >&2
+if [[ $template_filename != *.theme ]]; then
+    printf 'Error: template filename must end with .theme: %s\n' "$template_filename" >&2
     exit 2
 fi
 template_name=${template_filename#SxC_}
@@ -114,9 +131,9 @@ if [[ -z $output_dir ]]; then
     output_dir="$repo_root/screenshots"
 fi
 
-if command -v magick >/dev/null 2>&1; then
+if command -v magick > /dev/null 2>&1; then
     image_command=magick
-elif command -v convert >/dev/null 2>&1; then
+elif command -v convert > /dev/null 2>&1; then
     image_command=convert
 else
     printf 'Error: ImageMagick is required (magick or convert).\n' >&2
@@ -148,7 +165,7 @@ read_colors() {
                 colors["$key"]=${value:2}
             fi
         fi
-    done <"$file"
+    done < "$file"
 }
 
 read_colors "$template_theme" source_colors
@@ -174,3 +191,45 @@ for index in 01 02 03 04; do
     "$image_command" "${args[@]}"
     printf 'Generated %s\n' "$output"
 done
+if awk '
+    /^wallpaper:[[:space:]]*$/ { in_wallpaper = 1; next }
+    in_wallpaper && /^[^[:space:]]/ { exit }
+    in_wallpaper && $1 == "image:" && $2 ~ /^"data:image\/(png|jpg);base64,/ {
+        found = 1
+        exit
+    }
+    END { if (!found) exit 1 }
+' "$theme_file"; then
+    tmp_wallpaper_dir=$(mktemp -d)
+    tmp_wallpaper="$tmp_wallpaper_dir/wallpaper.png"
+    trap 'rm -rf -- "$tmp_wallpaper_dir"' EXIT
+    "$script_dir/extract_wallpaper.sh" "$theme_file" "$tmp_wallpaper"
+
+    wallpaper_background=$(read_wallpaper_field "$theme_file" background)
+    wallpaper_background=${wallpaper_background:-'#ff101820'}
+    if [[ $wallpaper_background =~ ^#[[:xdigit:]]{8}$ ]]; then
+        wallpaper_background="#${wallpaper_background:3}"
+    fi
+
+    wallpaper_tint=$(read_wallpaper_field "$theme_file" tint)
+    tint_color=
+    tint_percent=0
+    if [[ $wallpaper_tint =~ ^#([[:xdigit:]]{2})([[:xdigit:]]{6})$ ]]; then
+        tint_color="#${BASH_REMATCH[2]}"
+        tint_percent=$((16#${BASH_REMATCH[1]} * 100 / 255))
+    elif [[ $wallpaper_tint =~ ^#[[:xdigit:]]{6}$ ]]; then
+        tint_color=$wallpaper_tint
+        tint_percent=100
+    fi
+
+    wallpaper_preview="$output_dir/SxC_${theme_name}_wallpaper.png"
+    args=("$tmp_wallpaper")
+    if ((tint_percent > 0)); then
+        args+=(-fill "$tint_color" -colorize "${tint_percent}%")
+    fi
+    args+=(-background "$wallpaper_background" -alpha remove -alpha off "$wallpaper_preview")
+    "$image_command" "${args[@]}"
+    rm -rf -- "$tmp_wallpaper_dir"
+    trap - EXIT
+    printf 'Generated %s\n' "$wallpaper_preview"
+fi

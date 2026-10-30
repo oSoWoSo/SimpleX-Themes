@@ -90,7 +90,9 @@ bash scripts/generate_screenshots.sh themes/SxC_yourTheme.theme
 
 The generated files go to `screenshots/` by default. With `auto` (the default),
 the script looks for a screenshot set whose `wallpaper.preset` matches the
-target theme. If the target has no preset, it uses Adaidas Black.
+target theme. If it has no preset, it uses SimpleX Default (the plain background).
+Theme filenames without an `SxC_` prefix are also accepted; preview filenames
+still use the `SxC_` prefix.
 
 To choose a different pattern explicitly, pass the theme whose screenshots
 contain it:
@@ -103,11 +105,12 @@ bash scripts/generate_screenshots.sh \
 ```
 
 The selected theme must have matching `screenshots/SxC_templateTheme01.jpg`
-through `04.jpg` files. The pattern is taken from those screenshots; the
-script does not extract embedded wallpaper images from `.theme` files. PRs
-that change themes generate previews as a downloadable GitHub Actions artifact.
-The workflow uses `PREVIEW_TEMPLATE=auto` by default; set it to a theme path to
-choose a fixed screenshot set instead.
+through `04.jpg` files. The four JPGs use that screenshot set as their
+background. For a theme with an embedded PNG/JPG wallpaper, the script also
+generates `SxC_themeName_wallpaper.png` using the theme's wallpaper tint and
+background. PRs that change themes upload generated JPG and PNG previews as a
+GitHub Actions artifact. The workflow uses `PREVIEW_TEMPLATE=auto` by default;
+set it to a theme path to choose a fixed screenshot set instead.
 
 ### Embedding a custom wallpaper PNG
 

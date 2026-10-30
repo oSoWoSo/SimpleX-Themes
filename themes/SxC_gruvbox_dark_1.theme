@@ -1,0 +1,19 @@
+base: "BLACK"
+colors:
+  accent: "#ff83a598"
+  accentVariant: "#ff458588"
+  secondary: "#ffb8bb26"
+  secondaryVariant: "#ff3c3836"
+  background: "#ff282828"
+  menus: "#ff1d2021"
+  title: "#ffebdbb2"
+  accentVariant2: "#ff458588"
+  sentMessage: "#ff3c3836"
+  sentReply: "#ff504945"
+  receivedMessage: "#ff32302f"
+  receivedReply: "#ff45403d"
+wallpaper:
+  scale: 1.0
+  scaleType: "fill"
+  background: "#ff282828"
+  tint: "#00ffffff"
