@@ -13,7 +13,7 @@ jobs:
       PREVIEW_TEMPLATE: auto
     steps:
       - name: Checkout pull request
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
@@ -35,7 +35,7 @@ jobs:
             "$BASE_SHA...$HEAD_SHA" -- 'themes/*.theme')
 
       - name: Upload generated previews
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: generated-theme-previews
           path: |
