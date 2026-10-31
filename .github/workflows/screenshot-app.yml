@@ -1,0 +1,177 @@
+name: Screenshot SimpleX Chat
+
+on:
+  workflow_dispatch:
+    inputs:
+      theme_file:
+        description: 'Theme file to screenshot'
+        required: true
+        default: 'themes/SxC_darkGreen+.theme'
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb xdotool scrot imagemagick libfuse2 wget jq
+
+      - name: Download SimpleX Chat
+        run: |
+          # Use pkgforge-dev enhanced AppImage (anylinux, no FUSE required)
+          # Use GITHUB_TOKEN for API authentication
+          RELEASE_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/pkgforge-dev/SimpleX-Chat-AppImage-Enhanced/releases/latest)
+          if [[ -z "$RELEASE_JSON" || "$RELEASE_JSON" == "null" ]]; then
+            echo "GitHub API returned empty response"
+            exit 1
+          fi
+          SIMPLEX_VERSION=$(echo "$RELEASE_JSON" | jq -r '.tag_name')
+          echo "SimpleX version: $SIMPLEX_VERSION"
+          DOWNLOAD_URL=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | test("anylinux.*x86_64.*AppImage$")) | .browser_download_url' | head -1)
+          if [[ -z "$DOWNLOAD_URL" || "$DOWNLOAD_URL" == "null" ]]; then
+            echo "Could not find AppImage download URL"
+            exit 1
+          fi
+          echo "Downloading: $DOWNLOAD_URL"
+          wget -q "$DOWNLOAD_URL" -O /tmp/simplex-chat.AppImage
+          chmod +x /tmp/simplex-chat.AppImage
+
+      - name: Prepare SimpleX profile
+        run: |
+          mkdir -p ~/.config/simplex
+          # Copy pre-configured profile from repo
+          if [[ -d config/simplex ]]; then
+            cp -r config/simplex/* ~/.config/simplex/
+            echo "Profile copied from repo"
+          fi
+          # Import theme file if provided
+          THEME_FILE="${{ github.event.inputs.theme_file }}"
+          if [[ -n "$THEME_FILE" && -f "$THEME_FILE" ]]; then
+            cp "$THEME_FILE" ~/.config/simplex/
+            echo "Theme file copied: $THEME_FILE"
+          fi
+          ls -la ~/.config/simplex/
+
+      - name: Start virtual display
+        run: |
+          Xvfb :99 -screen 0 1920x1080x24 &
+          sleep 3
+          echo "DISPLAY=:99" >> $GITHUB_ENV
+
+      - name: Launch SimpleX Chat
+        env:
+          DISPLAY: ':99'
+        run: |
+          # Try running directly with --user-display-name to skip profile creation
+          /tmp/simplex-chat.AppImage --no-sandbox --user-display-name "CI_Test" > /tmp/simplex.log 2>&1 &
+          SIMPLEX_PID=$!
+          sleep 5
+          if ! kill -0 $SIMPLEX_PID 2>/dev/null; then
+            echo "Direct launch failed, trying extraction..."
+            cat /tmp/simplex.log | tail -5
+            cd /tmp && /tmp/simplex-chat.AppImage --appimage-extract > /tmp/extract.log 2>&1
+            if [[ -d /tmp/squashfs-root ]]; then
+              if [[ -f /tmp/squashfs-root/AppRun ]]; then
+                /tmp/squashfs-root/AppRun --no-sandbox --user-display-name "CI_Test" > /tmp/simplex.log 2>&1 &
+              else
+                $(find /tmp/squashfs-root -maxdepth 2 -type f -executable | head -1) --no-sandbox --user-display-name "CI_Test" > /tmp/simplex.log 2>&1 &
+              fi
+              SIMPLEX_PID=$!
+            fi
+          fi
+          echo "SIMPLEX_PID=$SIMPLEX_PID" >> $GITHUB_ENV
+          sleep 30
+          if kill -0 $SIMPLEX_PID 2>/dev/null; then
+            echo "SimpleX Chat is running"
+          else
+            echo "SimpleX Chat failed to start"
+            cat /tmp/simplex.log | tail -30
+            exit 1
+          fi
+          scrot /tmp/01_app_started.png
+
+          # Handle initial profile creation if needed
+          if xdotool search --name "SimpleX" > /dev/null 2>&1; then
+            echo "SimpleX window found"
+            WIN_ID=$(xdotool search --name "SimpleX" | head -1)
+            xdotool windowactivate $WIN_ID 2>/dev/null || true
+            sleep 2
+            # Tab to "Create your profile" button on welcome screen
+            xdotool key Tab Tab Tab Tab Tab 2>/dev/null || true
+            sleep 1
+            # Press Enter to click the focused button
+            xdotool key Return 2>/dev/null || true
+            sleep 5
+            scrot /tmp/03_after_tab.png
+            echo "Tabbed to profile creation"
+            # Type a random profile name
+            RANDOM_NAME="CI_Test_$(date +%s)"
+            xdotool type "$RANDOM_NAME"
+            sleep 1
+            scrot /tmp/03b_name_entered.png
+            echo "Typed name: $RANDOM_NAME"
+            # Tab to "Create profile" button and press Enter
+            xdotool key Tab 2>/dev/null || true
+            sleep 1
+            xdotool key Return 2>/dev/null || true
+            sleep 5
+            scrot /tmp/04_after_create.png
+            echo "Profile creation attempted"
+            # Handle database passphrase setup (if appeared)
+            # Type passphrase in first field
+            xdotool type "testpass123" 2>/dev/null || true
+            sleep 1
+            scrot /tmp/04b_passphrase_entered.png
+            # Get window geometry
+            WIN_ID=$(xdotool search --name "SimpleX" | head -1)
+            eval $(xdotool getwindowgeometry --shell $WIN_ID)
+            echo "Window: X=$X Y=$Y WIDTH=$WIDTH HEIGHT=$HEIGHT"
+            # Try to use xdotool with --window and relative coordinates
+            # Second field is approximately 35% down from top, centered
+            FIELD2_X=$((X + WIDTH / 2))
+            FIELD2_Y=$((Y + HEIGHT * 35 / 100))
+            echo "Clicking second field at $FIELD2_X, $FIELD2_Y"
+            xdotool mousemove --window $WIN_ID 50% 40% 2>/dev/null || true
+            sleep 0.5
+            xdotool click --window $WIN_ID 1 2>/dev/null || true
+            sleep 1
+            xdotool type "testpass123" 2>/dev/null || true
+            sleep 1
+            scrot /tmp/04c_passphrase_confirmed.png
+            # Try to click "Set database passphrase" button
+            xdotool mousemove --window $WIN_ID 50% 65% 2>/dev/null || true
+            xdotool click --window $WIN_ID 1 2>/dev/null || true
+            sleep 5
+            scrot /tmp/05_after_passphrase.png
+            echo "Passphrase set"
+          fi
+
+      - name: Take final screenshots
+        env:
+          DISPLAY: ':99'
+        run: |
+          sleep 5
+          scrot /tmp/screenshot_final.png
+          echo "Final screenshot taken"
+          ls -la /tmp/*.png
+
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: simplex-screenshots
+          path: /tmp/*.png
+          if-no-files-found: ignore
+
+      - name: Cleanup
+        if: always()
+        run: |
+          if [[ -n "${SIMPLEX_PID:-}" ]]; then
+            kill $SIMPLEX_PID 2>/dev/null || true
+          fi
+          pkill -f Xvfb 2>/dev/null || true

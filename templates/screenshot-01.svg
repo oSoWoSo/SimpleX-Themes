@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 800" width="400" height="800">
+  <!-- Background -->
+  <rect id="bg" width="400" height="800" fill="#0b1120"/>
+
+  <!-- Header -->
+  <g id="header">
+    <rect x="0" y="0" width="400" height="60" fill="#0b1120"/>
+    <polygon id="back-arrow" points="20,30 30,20 30,40" fill="#38bdf8"/>
+    <rect id="avatar" x="45" y="15" width="30" height="30" rx="6" fill="#1e3a5f"/>
+    <text id="name" x="85" y="35" fill="#ffffff" font-size="16" font-weight="bold">SLCW</text>
+    <polygon id="verified" points="130,28 135,33 140,28 135,23" fill="#38bdf8"/>
+    <path id="phone-icon" d="M340,25 Q350,15 360,25 Q350,35 340,25" fill="none" stroke="#38bdf8" stroke-width="2"/>
+    <circle id="menu-dot1" cx="375" cy="22" r="2" fill="#38bdf8"/>
+    <circle id="menu-dot2" cx="375" cy="30" r="2" fill="#38bdf8"/>
+    <circle id="menu-dot3" cx="375" cy="38" r="2" fill="#38bdf8"/>
+  </g>
+
+  <!-- Chat area -->
+  <g id="chat">
+    <!-- Sent bubble 1 -->
+    <rect id="sent-1" x="80" y="80" width="300" height="120" rx="12" fill="#152642"/>
+    <text id="sent-1-text" x="90" y="100" fill="#ffffff" font-size="12">Lorem ipsum dolor sit amet...</text>
+    <text id="sent-1-status" x="360" y="190" fill="#64748b" font-size="10">8/27</text>
+
+    <!-- Received bubble 1 -->
+    <rect id="recv-1" x="20" y="220" width="300" height="60" rx="12" fill="#212638"/>
+    <text id="recv-1-text" x="30" y="240" fill="#ffffff" font-size="12">Vestibulum pulvinar sit amet...</text>
+    <text id="recv-1-date" x="300" y="270" fill="#64748b" font-size="10">8/27</text>
+
+    <!-- Sent bubble 2 (reply) -->
+    <rect id="sent-2" x="80" y="300" width="300" height="140" rx="12" fill="#152642"/>
+    <rect id="sent-2-quote" x="90" y="310" width="280" height="40" rx="6" fill="#1a3050"/>
+    <text id="sent-2-quote-text" x="100" y="330" fill="#64748b" font-size="10">Vestibulum pulvinar...</text>
+    <text id="sent-2-text" x="90" y="370" fill="#ffffff" font-size="12">Nunc dapibus, dolor quis...</text>
+    <text id="sent-2-status" x="360" y="430" fill="#64748b" font-size="10">8/27</text>
+
+    <!-- Received bubble 2 (reply) -->
+    <rect id="recv-2" x="20" y="460" width="300" height="100" rx="12" fill="#212638"/>
+    <rect id="recv-2-quote" x="30" y="470" width="280" height="30" rx="6" fill="#2a2f45"/>
+    <text id="recv-2-quote-label" x="40" y="485" fill="#64748b" font-size="9">you</text>
+    <text id="recv-2-quote-text" x="40" y="495" fill="#64748b" font-size="9">Nunc dapibus...</text>
+    <text id="recv-2-text" x="30" y="520" fill="#ffffff" font-size="12">Nullam egestas aliquet...</text>
+    <text id="recv-2-date" x="300" y="550" fill="#64748b" font-size="10">8/27</text>
+
+    <!-- Sent bubble 3 -->
+    <rect id="sent-3" x="80" y="580" width="300" height="50" rx="12" fill="#152642"/>
+    <text id="sent-3-text" x="90" y="600" fill="#ffffff" font-size="12">Praesent mollis...</text>
+    <text id="sent-3-status" x="360" y="620" fill="#64748b" font-size="10">8/27</text>
+  </g>
+
+  <!-- Input bar -->
+  <g id="input-bar">
+    <rect x="0" y="740" width="400" height="60" fill="#0b1120"/>
+    <path id="attach-icon" d="M20,770 Q30,760 40,770" fill="none" stroke="#38bdf8" stroke-width="2"/>
+    <text id="input-placeholder" x="55" y="775" fill="#64748b" font-size="14">Message</text>
+    <path id="mic-icon" d="M340,765 Q350,755 360,765" fill="none" stroke="#38bdf8" stroke-width="2"/>
+    <polygon id="send-icon" points="370,760 385,770 370,780" fill="#38bdf8"/>
+  </g>
+</svg>
