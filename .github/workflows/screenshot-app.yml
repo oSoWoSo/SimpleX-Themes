@@ -111,10 +111,17 @@ jobs:
             scrot /tmp/03b_name_entered.png
             echo "Typed name: $RANDOM_NAME"
             # Click "Create profile" button (bottom center)
-            xdotool mousemove 960 800 click 1 2>/dev/null || true
-            sleep 5
-            scrot /tmp/04_after_create.png
-            echo "Profile creation attempted"
+            # Try multiple positions
+            for pos in "960 780" "960 800" "960 820" "960 850" "960 880" "960 900"; do
+              set -- $pos
+              echo "Trying click at $1, $2"
+              xdotool mousemove $1 $2 click 1
+              sleep 3
+              scrot /tmp/04_try_${1}_${2}.png
+            done
+            scrot /tmp/04_after_clicks.png
+            echo "Click attempts done"
+            # Handle database passphrase setup
             # Handle database passphrase setup
             xdotool type "testpass123" 2>/dev/null || true
             sleep 1
