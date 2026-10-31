@@ -1,0 +1,121 @@
+name: Screenshot SimpleX Chat
+
+on:
+  workflow_dispatch:
+    inputs:
+      theme_file:
+        description: 'Theme file to screenshot'
+        required: true
+        default: 'themes/SxC_darkGreen+.theme'
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb xdotool scrot imagemagick libfuse2 wget jq
+
+      - name: Download SimpleX Chat
+        run: |
+          SIMPLEX_VERSION=$(curl -s https://api.github.com/repos/simplex-chat/simplex-chat/releases/latest | jq -r '.tag_name')
+          echo "SimpleX version: $SIMPLEX_VERSION"
+          wget -q "https://github.com/simplex-chat/simplex-chat/releases/download/${SIMPLEX_VERSION}/simplex-desktop-x86_64.AppImage" -O /tmp/simplex-chat.AppImage || wget -q "https://github.com/simplex-chat/simplex-chat/releases/download/${SIMPLEX_VERSION}/simplex-desktop-x86_64.AppImage" -O /tmp/simplex-chat.AppImage
+          chmod +x /tmp/simplex-chat.AppImage
+
+      - name: Prepare SimpleX profile
+        run: |
+          mkdir -p ~/.config/simplex
+          cat > ~/.config/simplex/settings.properties <<'PROPS'
+          AppLanguage=en
+          DesktopCloseBehavior=MinimizeToTray
+          NewDatabaseInitialized=true
+          CurrentTheme=BLACK
+          DeveloperTools=true
+          PROPS
+          THEME_FILE="${{ github.event.inputs.theme_file }}"
+          if [[ -n "$THEME_FILE" && -f "$THEME_FILE" ]]; then
+            cp "$THEME_FILE" ~/.config/simplex/
+            echo "Theme file copied: $THEME_FILE"
+          fi
+
+      - name: Start virtual display
+        run: |
+          Xvfb :99 -screen 0 1920x1080x24 &
+          sleep 3
+          echo "DISPLAY=:99" >> $GITHUB_ENV
+
+      - name: Launch SimpleX Chat
+        env:
+          DISPLAY: ':99'
+        run: |
+          # Extract AppImage (FUSE may not be available in CI)
+          cd /tmp && /tmp/simplex-chat.AppImage --appimage-extract > /tmp/extract.log 2>&1
+          if [[ -d /tmp/squashfs-root ]]; then
+            echo "Extracted successfully"
+            ls /tmp/squashfs-root/ | head -5
+            # Find the main executable
+            if [[ -f /tmp/squashfs-root/AppRun ]]; then
+              /tmp/squashfs-root/AppRun --no-sandbox > /tmp/simplex.log 2>&1 &
+            elif [[ -f /tmp/squashfs-root/simplex-desktop ]]; then
+              /tmp/squashfs-root/simplex-desktop --no-sandbox > /tmp/simplex.log 2>&1 &
+            else
+              find /tmp/squashfs-root -maxdepth 2 -type f -executable | head -3
+              $(find /tmp/squashfs-root -maxdepth 2 -type f -executable | head -1) --no-sandbox > /tmp/simplex.log 2>&1 &
+            fi
+          else
+            echo "Extraction failed, trying --appimage-extract-and-run"
+            /tmp/simplex-chat.AppImage --appimage-extract-and-run --no-sandbox > /tmp/simplex.log 2>&1 &
+          fi
+          SIMPLEX_PID=$!
+          echo "SIMPLEX_PID=$SIMPLEX_PID" >> $GITHUB_ENV
+          sleep 30
+          if kill -0 $SIMPLEX_PID 2>/dev/null; then
+            echo "SimpleX Chat is running"
+          else
+            echo "SimpleX Chat failed to start"
+            cat /tmp/simplex.log | tail -30
+            exit 1
+          fi
+          scrot /tmp/01_app_started.png
+
+      - name: Apply theme and capture
+        env:
+          DISPLAY: ':99'
+        run: |
+          sleep 5
+          scrot /tmp/02_initial.png
+          # Theme application via UI automation (fragile)
+          # SimpleX Chat: Settings -> Appearance -> Customize theme -> Import
+          # xdotool key ctrl+comma
+          # sleep 2
+          # xdotool key Down Down Return
+          # sleep 2
+          # xdotool key ctrl+i
+          # sleep 2
+          # xdotool type "$HOME/.config/simplex/$(basename $THEME_FILE)"
+          # xdotool key Return
+          # sleep 3
+          # scrot /tmp/03_theme_imported.png
+          scrot /tmp/screenshot_final.png
+          echo "Screenshots captured"
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: simplex-screenshots
+          path: /tmp/*.png
+          if-no-files-found: ignore
+
+      - name: Cleanup
+        if: always()
+        run: |
+          if [[ -n "${SIMPLEX_PID:-}" ]]; then
+            kill $SIMPLEX_PID 2>/dev/null || true
+          fi
+          pkill -f Xvfb 2>/dev/null || true
