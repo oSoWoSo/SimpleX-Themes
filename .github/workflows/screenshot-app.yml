@@ -139,14 +139,7 @@ jobs:
             scrot /tmp/04c_passphrase_confirmed.png
             # Approach 2: Try pyautogui if available
             if python3 -c "import pyautogui" 2>/dev/null; then
-                python3 -c "
-import pyautogui, time
-pyautogui.press('tab')
-time.sleep(0.5)
-pyautogui.typewrite('testpass123')
-time.sleep(0.5)
-pyautogui.press('enter')
-" 2>/dev/null || true
+                python3 -c "import pyautogui,time; pyautogui.press('tab'); time.sleep(0.5); pyautogui.typewrite('testpass123'); time.sleep(0.5); pyautogui.press('enter')" 2>/dev/null || true
                 sleep 3
                 scrot /tmp/04c_pyautogui.png
             fi
