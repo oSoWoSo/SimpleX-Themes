@@ -127,26 +127,20 @@ jobs:
             xdotool type "testpass123" 2>/dev/null || true
             sleep 1
             scrot /tmp/04b_passphrase_entered.png
-            # Get window ID and geometry
+            # Get window ID
             WIN_ID=$(xdotool search --name "SimpleX" | head -1)
             echo "Window ID: $WIN_ID"
-            eval $(xdotool getwindowgeometry --shell $WIN_ID)
-            echo "Window: X=$X Y=$Y WIDTH=$WIDTH HEIGHT=$HEIGHT"
-            # Calculate positions relative to window
-            FIELD2_X=$((X + WIDTH / 2))
-            FIELD2_Y=$((Y + HEIGHT * 2 / 5))
-            BTN_X=$((X + WIDTH / 2))
-            BTN_Y=$((Y + HEIGHT * 3 / 4))
-            echo "Field2: $FIELD2_X, $FIELD2_Y"
-            echo "Button: $BTN_X, $BTN_Y"
-            # Click on second field
-            xdotool mousemove $FIELD2_X $FIELD2_Y click 1 2>/dev/null || true
+            # Use xdotool with --window to click relative to window
+            # Second field is below first field, centered horizontally
+            xdotool mousemove --window $WIN_ID 50% 40% 2>/dev/null || true
+            xdotool click --window $WIN_ID 1 2>/dev/null || true
             sleep 0.5
             xdotool type "testpass123" 2>/dev/null || true
             sleep 1
             scrot /tmp/04c_passphrase_confirmed.png
-            # Click "Set database passphrase" button
-            xdotool mousemove $BTN_X $BTN_Y click 1 2>/dev/null || true
+            # Click "Set database passphrase" button (bottom center)
+            xdotool mousemove --window $WIN_ID 50% 70% 2>/dev/null || true
+            xdotool click --window $WIN_ID 1 2>/dev/null || true
             sleep 5
             scrot /tmp/05_after_passphrase.png
             echo "Passphrase set"
