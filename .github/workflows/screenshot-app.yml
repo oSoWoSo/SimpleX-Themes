@@ -95,61 +95,44 @@ jobs:
           if xdotool search --name "SimpleX" > /dev/null 2>&1; then
             echo "SimpleX window found"
             WIN_ID=$(xdotool search --name "SimpleX" | head -1)
+            echo "Window ID: $WIN_ID"
+            xdotool getwindowgeometry $WIN_ID
+            eval $(xdotool getwindowgeometry --shell $WIN_ID)
+            echo "Window: X=$X Y=$Y WIDTH=$WIDTH HEIGHT=$HEIGHT"
             xdotool windowactivate $WIN_ID 2>/dev/null || true
             sleep 2
-            # Click "Create your profile" button
-            # Try multiple positions (button location may vary)
-            for pos in "1350 700" "1200 750" "1400 680" "1100 720"; do
-              set -- $pos
-              xdotool mousemove $1 $2 click 1
-              sleep 3
-              # Check if screen changed (profile creation dialog appeared)
-              scrot /tmp/02_attempt_${pos// /_}.png
-            done
-            scrot /tmp/02_after_create_profile.png
-            echo "Profile creation attempted"
+            # Maximize window to known size
+            xdotool windowsize $WIN_ID 1920 1080 2>/dev/null || true
+            xdotool windowmove $WIN_ID 0 0 2>/dev/null || true
+            sleep 2
+            scrot /tmp/02_window_ready.png
+            # Try tabbing to the button
+            xdotool key Tab Tab Tab Tab Tab 2>/dev/null || true
+            sleep 1
+            xdotool key Return 2>/dev/null || true
+            sleep 5
+            scrot /tmp/03_after_tab.png
+            echo "Tab approach attempted"
+            # Also try clicking at calculated position
+            BTN_X=$((X + WIDTH * 3 / 4))
+            BTN_Y=$((Y + HEIGHT * 2 / 3))
+            echo "Trying click at $BTN_X, $BTN_Y"
+            xdotool mousemove $BTN_X $BTN_Y click 1
+            sleep 5
+            scrot /tmp/04_after_click.png
+            echo "Click attempted"
           fi
 
-      - name: Create profile and capture
+      - name: Take final screenshots
         env:
           DISPLAY: ':99'
         run: |
           sleep 5
-          scrot /tmp/02_before_profile.png
-          
-          # Find SimpleX window and get its geometry
-          WIN_ID=$(xdotool search --name "SimpleX" | head -1)
-          if [[ -n "$WIN_ID" ]]; then
-            echo "Window ID: $WIN_ID"
-            xdotool getwindowgeometry $WIN_ID
-            # Get window position and size
-            eval $(xdotool getwindowgeometry --shell $WIN_ID)
-            echo "Window: X=$X Y=$Y WIDTH=$WIDTH HEIGHT=$HEIGHT"
-            # Calculate button position (center-right of window)
-            BTN_X=$((X + WIDTH * 2 / 3))
-            BTN_Y=$((Y + HEIGHT * 2 / 3))
-            echo "Calculated button position: $BTN_X, $BTN_Y"
-            # Click the button
-            xdotool mousemove $BTN_X $BTN_Y click 1
-            sleep 10
-            scrot /tmp/03_after_profile.png
-            # Try typing a profile name
-            RANDOM_NAME="CI_Test_$(date +%s)"
-            xdotool type "$RANDOM_NAME" 2>/dev/null || true
-            sleep 1
-            xdotool key Return 2>/dev/null || true
-            sleep 5
-            scrot /tmp/04_profile_created.png
-          else
-            echo "No SimpleX window found"
-          fi
-          
-          # Take additional screenshots
-          sleep 5
-          scrot /tmp/05_main_screen.png
-          echo "Screenshots captured"
+          scrot /tmp/screenshot_final.png
+          echo "Final screenshot taken"
+          ls -la /tmp/*.png
 
-      - name: Upload screenshots
+
         uses: actions/upload-artifact@v7
         with:
           name: simplex-screenshots
