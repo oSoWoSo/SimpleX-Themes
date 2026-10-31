@@ -91,27 +91,39 @@ jobs:
           scrot /tmp/01_app_started.png
 
           # Handle initial profile creation if needed
-          # SimpleX Chat shows "Create your profile" on first launch
           if xdotool search --name "SimpleX" > /dev/null 2>&1; then
             echo "SimpleX window found"
             WIN_ID=$(xdotool search --name "SimpleX" | head -1)
+            xdotool getwindowgeometry $WIN_ID
+            eval $(xdotool getwindowgeometry --shell $WIN_ID)
+            echo "Window: X=$X Y=$Y WIDTH=$WIDTH HEIGHT=$HEIGHT"
             xdotool windowactivate $WIN_ID 2>/dev/null || true
             sleep 2
-            # Tab to navigate to profile creation
-            xdotool key Tab Tab Tab Tab Tab 2>/dev/null || true
+            # Maximize window
+            xdotool windowsize $WIN_ID 1920 1080 2>/dev/null || true
+            xdotool windowmove $WIN_ID 0 0 2>/dev/null || true
             sleep 2
-            scrot /tmp/03_after_tab.png
-            echo "Tabbed to profile creation"
-            # Type a random profile name
-            RANDOM_NAME="CI_Test_$(date +%s)"
-            xdotool type "$RANDOM_NAME"
+            scrot /tmp/02_window_ready.png
+            # Try keyboard navigation: Tab to "Create your profile" button
+            # The welcome screen has 2 buttons: "Link a mobile" and "Create your profile"
+            # Tab 4-5 times should reach "Create your profile"
+            xdotool key Tab Tab Tab Tab Tab
             sleep 1
-            scrot /tmp/03b_name_entered.png
-            echo "Typed name: $RANDOM_NAME"
-            # Press Enter to create profile
+            scrot /tmp/03_after_tab.png
+            # Press Enter to click the focused button
             xdotool key Return
             sleep 5
-            scrot /tmp/04_after_create.png
+            scrot /tmp/04_after_enter.png
+            # If profile creation screen appeared, type name and confirm
+            if xdotool search --name "SimpleX" > /dev/null 2>&1; then
+              # Check if we're on profile creation screen by trying to type
+              xdotool type "CI_Test_Profile" 2>/dev/null || true
+              sleep 1
+              scrot /tmp/04b_name_entered.png
+              xdotool key Return 2>/dev/null || true
+              sleep 5
+              scrot /tmp/05_profile_created.png
+            fi
             echo "Profile creation attempted"
           fi
 
