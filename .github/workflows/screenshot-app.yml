@@ -127,29 +127,21 @@ jobs:
             xdotool type "testpass123" 2>/dev/null || true
             sleep 1
             scrot /tmp/04b_passphrase_entered.png
-            # Try clicking on second field at various positions
-            # and type passphrase only once per position
-            for pos in "960 380" "960 400" "960 420" "960 440"; do
-              set -- $pos
-              echo "Trying second field at $1, $2"
-              xdotool mousemove $1 $2 click 1
-              sleep 0.5
-              xdotool key ctrl+a 2>/dev/null || true
-              xdotool key Delete 2>/dev/null || true
-              sleep 0.3
-              xdotool type "testpass123" 2>/dev/null || true
-              sleep 1
-              scrot /tmp/04c_try_${1}_${2}.png
-            done
+            # Use xdotool with window ID to send Tab
+            WIN_ID=$(xdotool search --name "SimpleX" | head -1)
+            echo "Window ID: $WIN_ID"
+            # Try sending Tab to the window
+            xdotool key --window $WIN_ID Tab 2>/dev/null || true
+            sleep 1
+            # Check if focus moved
+            scrot /tmp/04b2_after_tab.png
+            # Type passphrase in second field
+            xdotool type "testpass123" 2>/dev/null || true
+            sleep 1
             scrot /tmp/04c_passphrase_confirmed.png
-            # Try clicking "Set database passphrase" button
-            for pos in "960 520" "960 540" "960 560" "960 580" "960 600"; do
-              set -- $pos
-              echo "Trying button at $1, $2"
-              xdotool mousemove $1 $2 click 1
-              sleep 3
-              scrot /tmp/05_try_${1}_${2}.png
-            done
+            # Try to submit
+            xdotool key --window $WIN_ID Return 2>/dev/null || true
+            sleep 5
             scrot /tmp/05_after_passphrase.png
             echo "Passphrase set"
           fi
