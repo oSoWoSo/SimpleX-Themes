@@ -131,18 +131,21 @@ jobs:
             WIN_ID=$(xdotool search --name "SimpleX" | head -1)
             eval $(xdotool getwindowgeometry --shell $WIN_ID)
             echo "Window: X=$X Y=$Y WIDTH=$WIDTH HEIGHT=$HEIGHT"
-            # Try to use xdotool with --window and --sync
-            # Click on second field (center of screen, slightly below first field)
-            xdotool mousemove --sync --window $WIN_ID 50% 45% 2>/dev/null || true
+            # Try to use xdotool with --window and relative coordinates
+            # Second field is approximately 35% down from top, centered
+            FIELD2_X=$((X + WIDTH / 2))
+            FIELD2_Y=$((Y + HEIGHT * 35 / 100))
+            echo "Clicking second field at $FIELD2_X, $FIELD2_Y"
+            xdotool mousemove --window $WIN_ID 50% 40% 2>/dev/null || true
             sleep 0.5
             xdotool click --window $WIN_ID 1 2>/dev/null || true
             sleep 1
-            # Type passphrase
             xdotool type "testpass123" 2>/dev/null || true
             sleep 1
             scrot /tmp/04c_passphrase_confirmed.png
-            # Try to submit
-            xdotool key --window $WIN_ID --sync Return 2>/dev/null || true
+            # Try to click "Set database passphrase" button
+            xdotool mousemove --window $WIN_ID 50% 65% 2>/dev/null || true
+            xdotool click --window $WIN_ID 1 2>/dev/null || true
             sleep 5
             scrot /tmp/05_after_passphrase.png
             echo "Passphrase set"
