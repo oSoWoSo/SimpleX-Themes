@@ -96,7 +96,7 @@ jobs:
             WIN_ID=$(xdotool search --name "SimpleX" | head -1)
             xdotool windowactivate $WIN_ID 2>/dev/null || true
             sleep 2
-            # Tab to "Create your profile" button
+            # Tab to "Create your profile" button on welcome screen
             xdotool key Tab Tab Tab Tab Tab 2>/dev/null || true
             sleep 1
             # Press Enter to click the focused button
@@ -110,19 +110,15 @@ jobs:
             sleep 1
             scrot /tmp/03b_name_entered.png
             echo "Typed name: $RANDOM_NAME"
-            # Click "Create profile" button (bottom center)
-            # Try multiple positions
-            for pos in "960 780" "960 800" "960 820" "960 850" "960 880" "960 900"; do
-              set -- $pos
-              echo "Trying click at $1, $2"
-              xdotool mousemove $1 $2 click 1
-              sleep 3
-              scrot /tmp/04_try_${1}_${2}.png
-            done
-            scrot /tmp/04_after_clicks.png
-            echo "Click attempts done"
-            # Handle database passphrase setup
-            # Handle database passphrase setup
+            # Tab to "Create profile" button and press Enter
+            xdotool key Tab 2>/dev/null || true
+            sleep 1
+            xdotool key Return 2>/dev/null || true
+            sleep 5
+            scrot /tmp/04_after_create.png
+            echo "Profile creation attempted"
+            # Handle database passphrase setup (if appeared)
+            # Type passphrase
             xdotool type "testpass123" 2>/dev/null || true
             sleep 1
             xdotool key Tab 2>/dev/null || true
@@ -130,8 +126,10 @@ jobs:
             xdotool type "testpass123" 2>/dev/null || true
             sleep 1
             scrot /tmp/04b_passphrase_entered.png
-            # Click "Set database passphrase" button
-            xdotool mousemove 960 850 click 1 2>/dev/null || true
+            # Tab to "Set database passphrase" button and press Enter
+            xdotool key Tab 2>/dev/null || true
+            sleep 1
+            xdotool key Return 2>/dev/null || true
             sleep 5
             scrot /tmp/05_after_passphrase.png
             echo "Passphrase set"
