@@ -24,11 +24,16 @@ jobs:
       - name: Download SimpleX Chat
         run: |
           # Use pkgforge-dev enhanced AppImage (anylinux, no FUSE required)
-          RELEASE_JSON=$(curl -s https://api.github.com/repos/pkgforge-dev/SimpleX-Chat-AppImage-Enhanced/releases/latest)
+          # Use GITHUB_TOKEN for API authentication
+          RELEASE_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/pkgforge-dev/SimpleX-Chat-AppImage-Enhanced/releases/latest)
+          if [[ -z "$RELEASE_JSON" || "$RELEASE_JSON" == "null" ]]; then
+            echo "GitHub API returned empty response"
+            exit 1
+          fi
           SIMPLEX_VERSION=$(echo "$RELEASE_JSON" | jq -r '.tag_name')
           echo "SimpleX version: $SIMPLEX_VERSION"
           DOWNLOAD_URL=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | test("anylinux.*x86_64.*AppImage$")) | .browser_download_url' | head -1)
-          if [[ -z "$DOWNLOAD_URL" ]]; then
+          if [[ -z "$DOWNLOAD_URL" || "$DOWNLOAD_URL" == "null" ]]; then
             echo "Could not find AppImage download URL"
             exit 1
           fi
