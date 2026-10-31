@@ -120,9 +120,14 @@ jobs:
               xdotool type "CI_Test_Profile" 2>/dev/null || true
               sleep 1
               scrot /tmp/04b_name_entered.png
-              xdotool key Return 2>/dev/null || true
+              # Click "Create profile" button (bottom center)
+              xdotool mousemove 960 850 click 1 2>/dev/null || true
               sleep 5
               scrot /tmp/05_profile_created.png
+              # Fallback: try Enter
+              xdotool key Return 2>/dev/null || true
+              sleep 3
+              scrot /tmp/05b_after_enter.png
             fi
             echo "Profile creation attempted"
           fi
