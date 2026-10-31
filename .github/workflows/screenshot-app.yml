@@ -127,30 +127,22 @@ jobs:
             xdotool type "testpass123" 2>/dev/null || true
             sleep 1
             scrot /tmp/04b_passphrase_entered.png
-            # Try multiple approaches to fill second field
+            # Get window geometry
             WIN_ID=$(xdotool search --name "SimpleX" | head -1)
-            echo "Window ID: $WIN_ID"
-            # Approach 1: xdotool with --window and --sync
-            xdotool key --window $WIN_ID --sync Tab 2>/dev/null || true
+            eval $(xdotool getwindowgeometry --shell $WIN_ID)
+            echo "Window: X=$X Y=$Y WIDTH=$WIDTH HEIGHT=$HEIGHT"
+            # Try to use xdotool with --window and --sync
+            # Click on second field (center of screen, slightly below first field)
+            xdotool mousemove --sync --window $WIN_ID 50% 45% 2>/dev/null || true
+            sleep 0.5
+            xdotool click --window $WIN_ID 1 2>/dev/null || true
             sleep 1
-            scrot /tmp/04b2_after_tab.png
+            # Type passphrase
             xdotool type "testpass123" 2>/dev/null || true
             sleep 1
             scrot /tmp/04c_passphrase_confirmed.png
-            # Approach 2: Try pyautogui if available
-            if python3 -c "import pyautogui" 2>/dev/null; then
-                python3 -c "import pyautogui,time; pyautogui.press('tab'); time.sleep(0.5); pyautogui.typewrite('testpass123'); time.sleep(0.5); pyautogui.press('enter')" 2>/dev/null || true
-                sleep 3
-                scrot /tmp/04c_pyautogui.png
-            fi
-            # Approach 3: Click at estimated position of second field
-            xdotool mousemove 960 400 click 1 2>/dev/null || true
-            sleep 0.5
-            xdotool type "testpass123" 2>/dev/null || true
-            sleep 1
-            scrot /tmp/04c_click.png
             # Try to submit
-            xdotool key Return 2>/dev/null || true
+            xdotool key --window $WIN_ID --sync Return 2>/dev/null || true
             sleep 5
             scrot /tmp/05_after_passphrase.png
             echo "Passphrase set"
