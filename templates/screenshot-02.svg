@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 800" width="400" height="800">
+  <!-- Background -->
+  <rect id="bg" width="400" height="800" fill="#0f172a"/>
+  <!-- Right panel (chat list) -->
+  <rect x="340" y="0" width="60" height="800" fill="#334155"/>
+
+  <!-- Header -->
+  <g id="header">
+    <text id="title" x="20" y="40" fill="#3b82f6" font-size="20" font-weight="bold">Your settings</text>
+  </g>
+
+  <!-- YOU section -->
+  <g id="you-section">
+    <text x="20" y="70" fill="#9ca3af" font-size="10" font-weight="bold">YOU</text>
+    <!-- Avatar -->
+    <rect id="avatar" x="20" y="80" width="50" height="50" rx="8" fill="#1e3a5f"/>
+    <text id="username" x="80" y="110" fill="#ffffff" font-size="16" font-weight="bold">SLCW2</text>
+
+    <!-- Menu items -->
+    <g id="menu-1" transform="translate(20,140)">
+      <circle cx="15" cy="15" r="12" fill="none" stroke="#d1d5db" stroke-width="1.5"/>
+      <text x="40" y="20" fill="#ffffff" font-size="14">Your chat profiles</text>
+    </g>
+    <g id="menu-2" transform="translate(20,180)">
+      <rect x="3" y="3" width="24" height="24" rx="2" fill="none" stroke="#d1d5db" stroke-width="1.5"/>
+      <text x="40" y="20" fill="#ffffff" font-size="14">Your SimpleX address</text>
+    </g>
+    <g id="menu-3" transform="translate(20,220)">
+      <rect x="3" y="8" width="24" height="14" rx="7" fill="#374151"/>
+      <circle cx="20" cy="15" r="5" fill="#9ca3af"/>
+      <text x="40" y="20" fill="#ffffff" font-size="14">Chat preferences</text>
+    </g>
+    <g id="menu-4" transform="translate(20,260)">
+      <rect x="3" y="3" width="24" height="20" rx="2" fill="none" stroke="#d1d5db" stroke-width="1.5"/>
+      <text x="40" y="20" fill="#ffffff" font-size="14">Use from desktop</text>
+    </g>
+    <g id="menu-5" transform="translate(20,300)">
+      <rect x="8" y="3" width="14" height="18" rx="2" fill="none" stroke="#d1d5db" stroke-width="1.5"/>
+      <path d="M15,0 L15,8 L23,8" fill="none" stroke="#d1d5db" stroke-width="1.5"/>
+      <text x="40" y="20" fill="#ffffff" font-size="14">Migrate to another device</text>
+    </g>
+  </g>
+
+  <!-- Divider -->
+  <line x1="20" y1="340" x2="320" y2="340" stroke="#374151" stroke-width="1"/>
+
+  <!-- SETTINGS section -->
+  <g id="settings-section">
+    <text x="20" y="365" fill="#9ca3af" font-size="10" font-weight="bold">SETTINGS</text>
+    <g id="settings-1" transform="translate(20,380)">
+      <polygon points="15,3 27,15 15,27 3,15" fill="none" stroke="#d1d5db" stroke-width="1.5"/>
+      <text x="40" y="20" fill="#ffffff" font-size="14">Notifications</text>
+    </g>
+    <g id="settings-2" transform="translate(20,420)">
+      <path d="M5,20 A15,15 0 0,1 25,20" fill="none" stroke="#d1d5db" stroke-width="1.5"/>
+      <text x="40" y="20" fill="#ffffff" font-size="14">Network &amp; servers</text>
+    </g>
+    <g id="settings-3" transform="translate(20,460)">
+      <rect x="3" y="8" width="24" height="14" rx="3" fill="none" stroke="#d1d5db" stroke-width="1.5"/>
+      <circle cx="15" cy="15" r="4" fill="#d1d5db"/>
+      <text x="40" y="20" fill="#ffffff" font-size="14">Audio &amp; video calls</text>
+    </g>
+  </g>
+
+  <!-- Right panel icons -->
+  <g id="right-panel">
+    <circle cx="370" cy="30" r="15" fill="#67e8f9"/>
+    <line x1="363" y1="25" x2="377" y2="25" stroke="#ffffff" stroke-width="2"/>
+    <line x1="363" y1="30" x2="377" y2="30" stroke="#ffffff" stroke-width="2"/>
+    <line x1="363" y1="35" x2="377" y2="35" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="370" cy="760" r="20" fill="#67e8f9"/>
+    <path d="M362,760 L378,760 M370,752 L370,768" stroke="#ffffff" stroke-width="2"/>
+  </g>
+</svg>

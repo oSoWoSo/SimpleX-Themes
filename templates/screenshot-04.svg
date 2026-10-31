@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 800" width="400" height="800">
+  <!-- Background -->
+  <rect id="bg" width="400" height="800" fill="#111827"/>
+
+  <!-- Header -->
+  <g id="header">
+    <text x="20" y="20" fill="#3b82f6" font-size="16">‹</text>
+    <text id="title" x="20" y="45" fill="#3b82f6" font-size="20" font-weight="bold">Your privacy</text>
+  </g>
+
+  <!-- DEVICE section -->
+  <g id="device-section">
+    <text x="20" y="80" fill="#9ca3af" font-size="10" font-weight="bold">DEVICE</text>
+
+    <!-- SimpleX Lock -->
+    <g transform="translate(0,90)">
+      <circle cx="30" cy="20" r="12" fill="#10b981"/>
+      <rect x="24" y="14" width="12" height="12" rx="2" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+      <text x="55" y="25" fill="#ffffff" font-size="14">SimpleX Lock</text>
+      <text x="370" y="25" fill="#9ca3af" font-size="14" text-anchor="end">System</text>
+    </g>
+
+    <!-- Protect app screen -->
+    <g transform="translate(0,130)">
+      <circle cx="30" cy="20" r="12" fill="none" stroke="#9ca3af" stroke-width="1.5"/>
+      <path d="M24,14 L30,8 L36,14 L36,26 L24,26 Z" fill="none" stroke="#9ca3af" stroke-width="1.5"/>
+      <line x1="24" y1="14" x2="36" y2="26" stroke="#9ca3af" stroke-width="1.5"/>
+      <text x="55" y="25" fill="#ffffff" font-size="14">Protect app screen</text>
+      <!-- Toggle OFF -->
+      <rect x="340" y="10" width="40" height="20" rx="10" fill="#374151"/>
+      <circle cx="350" cy="20" r="8" fill="#9ca3af"/>
+    </g>
+  </g>
+
+  <!-- Divider -->
+  <line x1="20" y1="170" x2="380" y2="170" stroke="#1f2937" stroke-width="1"/>
+
+  <!-- CHATS section -->
+  <g id="chats-section">
+    <text x="20" y="195" fill="#9ca3af" font-size="10" font-weight="bold">CHATS</text>
+
+    <!-- Send link previews -->
+    <g transform="translate(0,205)">
+      <circle cx="30" cy="20" r="12" fill="none" stroke="#9ca3af" stroke-width="1.5"/>
+      <circle cx="30" cy="20" r="6" fill="none" stroke="#9ca3af" stroke-width="1.5"/>
+      <text x="55" y="25" fill="#ffffff" font-size="14">Send link previews</text>
+      <!-- Toggle ON -->
+      <rect x="340" y="10" width="40" height="20" rx="10" fill="#134e4a"/>
+      <circle cx="370" cy="20" r="8" fill="#22d3ee"/>
+    </g>
+
+    <!-- Show last messages -->
+    <g transform="translate(0,245)">
+      <rect x="18" y="8" width="24" height="24" rx="4" fill="none" stroke="#9ca3af" stroke-width="1.5"/>
+      <text x="55" y="25" fill="#ffffff" font-size="14">Show last messages</text>
+      <!-- Toggle ON -->
+      <rect x="340" y="10" width="40" height="20" rx="10" fill="#134e4a"/>
+      <circle cx="370" cy="20" r="8" fill="#22d3ee"/>
+    </g>
+
+    <!-- Message draft -->
+    <g transform="translate(0,285)">
+      <rect x="18" y="8" width="24" height="18" rx="2" fill="none" stroke="#9ca3af" stroke-width="1.5"/>
+      <line x1="22" y1="14" x2="38" y2="14" stroke="#9ca3af" stroke-width="1"/>
+      <line x1="22" y1="18" x2="38" y2="18" stroke="#9ca3af" stroke-width="1"/>
+      <line x1="22" y1="22" x2="34" y2="22" stroke="#9ca3af" stroke-width="1"/>
+      <text x="55" y="25" fill="#ffffff" font-size="14">Message draft</text>
+      <!-- Toggle ON -->
+      <rect x="340" y="10" width="40" height="20" rx="10" fill="#134e4a"/>
+      <circle cx="370" cy="20" r="8" fill="#22d3ee"/>
+    </g>
+
+    <!-- SimpleX links -->
+    <g transform="translate(0,325)">
+      <text x="20" y="25" fill="#ffffff" font-size="14">SimpleX links</text>
+      <text x="330" y="25" fill="#9ca3af" font-size="14" text-anchor="end">Description</text>
+      <text x="370" y="25" fill="#9ca3af" font-size="14" text-anchor="end">▾</text>
+    </g>
+  </g>
+
+  <!-- Divider -->
+  <line x1="20" y1="365" x2="380" y2="365" stroke="#1f2937" stroke-width="1"/>
+
+  <!-- FILES section -->
+  <g id="files-section">
+    <text x="20" y="390" fill="#9ca3af" font-size="10" font-weight="bold">FILES</text>
+
+    <!-- Encrypt local files -->
+    <g transform="translate(0,400)">
+      <circle cx="30" cy="20" r="12" fill="none" stroke="#9ca3af" stroke-width="1.5"/>
+      <rect x="24" y="14" width="12" height="12" rx="2" fill="none" stroke="#9ca3af" stroke-width="1.5"/>
+      <text x="55" y="25" fill="#ffffff" font-size="14">Encrypt local files</text>
+      <!-- Toggle ON -->
+      <rect x="340" y="10" width="40" height="20" rx="10" fill="#134e4a"/>
+      <circle cx="370" cy="20" r="8" fill="#22d3ee"/>
+    </g>
+
+    <!-- Auto-accept images -->
+    <g transform="translate(0,440)">
+      <rect x="18" y="8" width="24" height="20" rx="4" fill="none" stroke="#9ca3af" stroke-width="1.5"/>
+      <path d="M22,12 L38,12 L38,24 L22,24 Z" fill="none" stroke="#9ca3af" stroke-width="1"/>
+      <circle cx="30" cy="18" r="4" fill="none" stroke="#9ca3af" stroke-width="1"/>
+      <text x="55" y="25" fill="#ffffff" font-size="14">Auto-accept images</text>
+      <!-- Toggle ON -->
+      <rect x="340" y="10" width="40" height="20" rx="10" fill="#134e4a"/>
+      <circle cx="370" cy="20" r="8" fill="#22d3ee"/>
+    </g>
+  </g>
+</svg>
