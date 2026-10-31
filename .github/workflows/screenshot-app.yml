@@ -122,15 +122,25 @@ jobs:
             xdotool type "testpass123" 2>/dev/null || true
             sleep 1
             scrot /tmp/04b_passphrase_entered.png
-            # Click on second field (below first field)
-            xdotool mousemove 960 480 click 1 2>/dev/null || true
-            sleep 0.5
-            xdotool type "testpass123" 2>/dev/null || true
-            sleep 1
+            # Click on second field at various positions
+            for pos in "960 420" "960 440" "960 460" "960 480" "960 500"; do
+              set -- $pos
+              echo "Trying click at $1, $2"
+              xdotool mousemove $1 $2 click 1
+              sleep 1
+              xdotool type "testpass123" 2>/dev/null || true
+              sleep 0.5
+              scrot /tmp/04c_try_${1}_${2}.png
+            done
             scrot /tmp/04c_passphrase_confirmed.png
-            # Click "Set database passphrase" button (bottom center)
-            xdotool mousemove 960 850 click 1 2>/dev/null || true
-            sleep 5
+            # Click "Set database passphrase" button at various positions
+            for pos in "960 580" "960 600" "960 620" "960 650" "960 700" "960 750"; do
+              set -- $pos
+              echo "Trying button click at $1, $2"
+              xdotool mousemove $1 $2 click 1
+              sleep 3
+              scrot /tmp/05_try_${1}_${2}.png
+            done
             scrot /tmp/05_after_passphrase.png
             echo "Passphrase set"
           fi
