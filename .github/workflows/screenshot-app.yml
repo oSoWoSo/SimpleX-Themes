@@ -95,33 +95,30 @@ jobs:
           if xdotool search --name "SimpleX" > /dev/null 2>&1; then
             echo "SimpleX window found"
             WIN_ID=$(xdotool search --name "SimpleX" | head -1)
-            echo "Window ID: $WIN_ID"
             xdotool getwindowgeometry $WIN_ID
             eval $(xdotool getwindowgeometry --shell $WIN_ID)
             echo "Window: X=$X Y=$Y WIDTH=$WIDTH HEIGHT=$HEIGHT"
             xdotool windowactivate $WIN_ID 2>/dev/null || true
             sleep 2
-            # Maximize window to known size
+            # Maximize window
             xdotool windowsize $WIN_ID 1920 1080 2>/dev/null || true
             xdotool windowmove $WIN_ID 0 0 2>/dev/null || true
             sleep 2
             scrot /tmp/02_window_ready.png
-            # Tab to the input field (5 tabs from welcome screen)
-            xdotool key Tab Tab Tab Tab Tab 2>/dev/null || true
-            sleep 1
-            scrot /tmp/03_after_tab.png
-            echo "Tabbed to input field"
-            # Type a random profile name
-            RANDOM_NAME="CI_Test_$(date +%s)"
-            xdotool type "$RANDOM_NAME"
-            sleep 1
-            scrot /tmp/03b_name_entered.png
-            echo "Typed name: $RANDOM_NAME"
-            # Press Enter to create profile
-            xdotool key Return
-            sleep 5
-            scrot /tmp/04_after_create.png
-            echo "Profile creation attempted"
+            # Try clicking at various positions for "Create your profile" button
+            # Button is on right side, below headline text
+            for pos in "1300 680" "1350 700" "1400 650" "1250 720" "1450 660" "1300 720"; do
+              set -- $pos
+              echo "Trying click at $1, $2"
+              xdotool mousemove $1 $2 click 1
+              sleep 4
+              scrot /tmp/02_try_${1}_${2}.png
+              # Check if screen changed by comparing file size
+              SIZE=$(stat -c %s /tmp/02_try_${1}_${2}.png)
+              echo "Screenshot size: $SIZE"
+            done
+            scrot /tmp/03_after_clicks.png
+            echo "Click attempts done"
           fi
 
       - name: Take final screenshots
