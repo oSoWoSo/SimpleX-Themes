@@ -122,14 +122,15 @@ jobs:
             xdotool type "testpass123" 2>/dev/null || true
             sleep 1
             scrot /tmp/04b_passphrase_entered.png
-            # Click on second field (confirmation) at estimated position
-            xdotool mousemove 1200 450 click 1 2>/dev/null || true
+            # Use window ID to send Tab to second field
+            WIN_ID=$(xdotool search --name "SimpleX" | head -1)
+            xdotool key --window $WIN_ID Tab 2>/dev/null || true
             sleep 0.5
             xdotool type "testpass123" 2>/dev/null || true
             sleep 1
             scrot /tmp/04c_passphrase_confirmed.png
             # Click "Set database passphrase" button
-            xdotool mousemove 1200 540 click 1 2>/dev/null || true
+            xdotool mousemove 960 540 click 1 2>/dev/null || true
             sleep 5
             scrot /tmp/05_after_passphrase.png
             echo "Passphrase set"
