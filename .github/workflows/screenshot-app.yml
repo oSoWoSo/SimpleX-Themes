@@ -94,48 +94,40 @@ jobs:
           if xdotool search --name "SimpleX" > /dev/null 2>&1; then
             echo "SimpleX window found"
             WIN_ID=$(xdotool search --name "SimpleX" | head -1)
-            xdotool getwindowgeometry $WIN_ID
-            eval $(xdotool getwindowgeometry --shell $WIN_ID)
-            echo "Window: X=$X Y=$Y WIDTH=$WIDTH HEIGHT=$HEIGHT"
             xdotool windowactivate $WIN_ID 2>/dev/null || true
             sleep 2
-            # Maximize window
-            xdotool windowsize $WIN_ID 1920 1080 2>/dev/null || true
-            xdotool windowmove $WIN_ID 0 0 2>/dev/null || true
-            sleep 2
-            scrot /tmp/02_window_ready.png
-            # Try keyboard navigation: Tab to "Create your profile" button
-            # The welcome screen has 2 buttons: "Link a mobile" and "Create your profile"
-            # Tab 4-5 times should reach "Create your profile"
-            xdotool key Tab Tab Tab Tab Tab
+            # Tab to "Create your profile" button
+            xdotool key Tab Tab Tab Tab Tab 2>/dev/null || true
             sleep 1
-            scrot /tmp/03_after_tab.png
             # Press Enter to click the focused button
-            xdotool key Return
+            xdotool key Return 2>/dev/null || true
             sleep 5
-            scrot /tmp/04_after_enter.png
-            # If profile creation screen appeared, type name and confirm
-            if xdotool search --name "SimpleX" > /dev/null 2>&1; then
-              # Check if we're on profile creation screen by trying to type
-              xdotool type "CI_Test_Profile" 2>/dev/null || true
-              sleep 1
-              scrot /tmp/04b_name_entered.png
-              # Click "Create profile" button (bottom center)
-              # Try multiple positions
-              for pos in "960 800" "960 850" "960 900" "960 750" "960 700"; do
-                set -- $pos
-                echo "Trying click at $1, $2"
-                xdotool mousemove $1 $2 click 1
-                sleep 3
-                scrot /tmp/05_try_${1}_${2}.png
-              done
-              scrot /tmp/05_profile_created.png
-              # Fallback: try Enter
-              xdotool key Return 2>/dev/null || true
-              sleep 3
-              scrot /tmp/05b_after_enter.png
-            fi
+            scrot /tmp/03_after_tab.png
+            echo "Tabbed to profile creation"
+            # Type a random profile name
+            RANDOM_NAME="CI_Test_$(date +%s)"
+            xdotool type "$RANDOM_NAME"
+            sleep 1
+            scrot /tmp/03b_name_entered.png
+            echo "Typed name: $RANDOM_NAME"
+            # Click "Create profile" button (bottom center)
+            xdotool mousemove 960 800 click 1 2>/dev/null || true
+            sleep 5
+            scrot /tmp/04_after_create.png
             echo "Profile creation attempted"
+            # Handle database passphrase setup
+            xdotool type "testpass123" 2>/dev/null || true
+            sleep 1
+            xdotool key Tab 2>/dev/null || true
+            sleep 0.5
+            xdotool type "testpass123" 2>/dev/null || true
+            sleep 1
+            scrot /tmp/04b_passphrase_entered.png
+            # Click "Set database passphrase" button
+            xdotool mousemove 960 850 click 1 2>/dev/null || true
+            sleep 5
+            scrot /tmp/05_after_passphrase.png
+            echo "Passphrase set"
           fi
 
       - name: Take final screenshots
