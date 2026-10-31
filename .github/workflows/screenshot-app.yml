@@ -91,7 +91,6 @@ jobs:
           scrot /tmp/01_app_started.png
 
           # Handle initial profile creation if needed
-          # SimpleX Chat shows "Create your profile" on first launch
           if xdotool search --name "SimpleX" > /dev/null 2>&1; then
             echo "SimpleX window found"
             WIN_ID=$(xdotool search --name "SimpleX" | head -1)
@@ -100,26 +99,29 @@ jobs:
             echo "Window: X=$X Y=$Y WIDTH=$WIDTH HEIGHT=$HEIGHT"
             xdotool windowactivate $WIN_ID 2>/dev/null || true
             sleep 2
-            # Maximize window
             xdotool windowsize $WIN_ID 1920 1080 2>/dev/null || true
             xdotool windowmove $WIN_ID 0 0 2>/dev/null || true
             sleep 2
             scrot /tmp/02_window_ready.png
-            # Try clicking at various positions for "Create your profile" button
-            # Button is on right side, below headline text
-            for pos in "1300 680" "1350 700" "1400 650" "1250 720" "1450 660" "1300 720"; do
-              set -- $pos
-              echo "Trying click at $1, $2"
-              xdotool mousemove $1 $2 click 1
-              sleep 4
-              scrot /tmp/02_try_${1}_${2}.png
-              # Check if screen changed by comparing file size
-              SIZE=$(stat -c %s /tmp/02_try_${1}_${2}.png)
-              echo "Screenshot size: $SIZE"
-            done
-            scrot /tmp/03_after_clicks.png
-            echo "Click attempts done"
+            # Click "Create your profile" button (right side, below headline)
+            BTN_X=$((X + WIDTH * 3 / 4))
+            BTN_Y=$((Y + HEIGHT * 2 / 3))
+            echo "Clicking at $BTN_X, $BTN_Y"
+            xdotool mousemove $BTN_X $BTN_Y click 1
+            sleep 5
+            scrot /tmp/03_after_click.png
+            # Type profile name
+            RANDOM_NAME="CI_Test_$(date +%s)"
+            xdotool type "$RANDOM_NAME"
+            sleep 1
+            scrot /tmp/03b_name_entered.png
+            # Press Enter to create profile
+            xdotool key Return
+            sleep 5
+            scrot /tmp/04_after_create.png
+            echo "Profile creation attempted with name: $RANDOM_NAME"
           fi
+
 
       - name: Take final screenshots
         env:
