@@ -127,31 +127,38 @@ jobs:
             xdotool type "testpass123" 2>/dev/null || true
             sleep 1
             scrot /tmp/04b_passphrase_entered.png
-            # Use Python with pynput if available, otherwise try xdotool
+            # Try multiple approaches to fill second field
+            WIN_ID=$(xdotool search --name "SimpleX" | head -1)
+            echo "Window ID: $WIN_ID"
+            # Approach 1: xdotool with --window and --sync
+            xdotool key --window $WIN_ID --sync Tab 2>/dev/null || true
+            sleep 1
+            scrot /tmp/04b2_after_tab.png
+            xdotool type "testpass123" 2>/dev/null || true
+            sleep 1
+            scrot /tmp/04c_passphrase_confirmed.png
+            # Approach 2: Try pyautogui if available
             if python3 -c "import pyautogui" 2>/dev/null; then
                 python3 -c "
 import pyautogui, time
-# Tab to second field
 pyautogui.press('tab')
 time.sleep(0.5)
 pyautogui.typewrite('testpass123')
 time.sleep(0.5)
-# Tab to button and press Enter
-pyautogui.press('tab')
-time.sleep(0.5)
 pyautogui.press('enter')
 " 2>/dev/null || true
-            else
-                # Fallback: try xdotool with window ID
-                WIN_ID=$(xdotool search --name "SimpleX" | head -1)
-                xdotool key --window $WIN_ID Tab 2>/dev/null || true
-                sleep 0.5
-                xdotool type "testpass123" 2>/dev/null || true
-                sleep 0.5
-                xdotool key --window $WIN_ID Return 2>/dev/null || true
+                sleep 3
+                scrot /tmp/04c_pyautogui.png
             fi
+            # Approach 3: Click at estimated position of second field
+            xdotool mousemove 960 400 click 1 2>/dev/null || true
+            sleep 0.5
+            xdotool type "testpass123" 2>/dev/null || true
+            sleep 1
+            scrot /tmp/04c_click.png
+            # Try to submit
+            xdotool key Return 2>/dev/null || true
             sleep 5
-            scrot /tmp/04c_passphrase_confirmed.png
             scrot /tmp/05_after_passphrase.png
             echo "Passphrase set"
           fi
