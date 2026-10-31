@@ -1,0 +1,16 @@
+themes:
+- themeId: "9180c14a-4f6e-437d-adf1-c82d121aef6e"
+  base: "DARK"
+  wallpaper:
+    preset: "flowers"
+    scale: 1.0
+- themeId: "9b3bf59e-871d-441b-8d18-4b61446ee612"
+  base: "BLACK"
+  wallpaper:
+    preset: "flowers"
+    scale: 1.0
+- themeId: "1b83333f-2a5a-46b2-a895-bad8c1046169"
+  base: "SIMPLEX"
+  wallpaper:
+    preset: "flowers"
+    scale: 2.0

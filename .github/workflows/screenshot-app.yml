@@ -1,0 +1,148 @@
+name: Screenshot SimpleX Chat
+
+on:
+  workflow_dispatch:
+    inputs:
+      theme_file:
+        description: 'Theme file to screenshot'
+        required: true
+        default: 'themes/SxC_darkGreen+.theme'
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb xdotool scrot imagemagick libfuse2 wget jq
+
+      - name: Download SimpleX Chat
+        run: |
+          # Use pkgforge-dev enhanced AppImage (anylinux, no FUSE required)
+          RELEASE_JSON=$(curl -s https://api.github.com/repos/pkgforge-dev/SimpleX-Chat-AppImage-Enhanced/releases/latest)
+          SIMPLEX_VERSION=$(echo "$RELEASE_JSON" | jq -r '.tag_name')
+          echo "SimpleX version: $SIMPLEX_VERSION"
+          DOWNLOAD_URL=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | test("anylinux.*x86_64.*AppImage$")) | .browser_download_url' | head -1)
+          if [[ -z "$DOWNLOAD_URL" ]]; then
+            echo "Could not find AppImage download URL"
+            exit 1
+          fi
+          echo "Downloading: $DOWNLOAD_URL"
+          wget -q "$DOWNLOAD_URL" -O /tmp/simplex-chat.AppImage
+          chmod +x /tmp/simplex-chat.AppImage
+
+      - name: Prepare SimpleX profile
+        run: |
+          mkdir -p ~/.config/simplex
+          # Copy pre-configured profile from repo
+          if [[ -d config/simplex ]]; then
+            cp -r config/simplex/* ~/.config/simplex/
+            echo "Profile copied from repo"
+          fi
+          # Import theme file if provided
+          THEME_FILE="${{ github.event.inputs.theme_file }}"
+          if [[ -n "$THEME_FILE" && -f "$THEME_FILE" ]]; then
+            cp "$THEME_FILE" ~/.config/simplex/
+            echo "Theme file copied: $THEME_FILE"
+          fi
+          ls -la ~/.config/simplex/
+
+      - name: Start virtual display
+        run: |
+          Xvfb :99 -screen 0 1920x1080x24 &
+          sleep 3
+          echo "DISPLAY=:99" >> $GITHUB_ENV
+
+      - name: Launch SimpleX Chat
+        env:
+          DISPLAY: ':99'
+        run: |
+          # Try running directly (anylinux AppImage may not need extraction)
+          /tmp/simplex-chat.AppImage --no-sandbox > /tmp/simplex.log 2>&1 &
+          SIMPLEX_PID=$!
+          sleep 5
+          if ! kill -0 $SIMPLEX_PID 2>/dev/null; then
+            echo "Direct launch failed, trying extraction..."
+            cat /tmp/simplex.log | tail -5
+            cd /tmp && /tmp/simplex-chat.AppImage --appimage-extract > /tmp/extract.log 2>&1
+            if [[ -d /tmp/squashfs-root ]]; then
+              if [[ -f /tmp/squashfs-root/AppRun ]]; then
+                /tmp/squashfs-root/AppRun --no-sandbox > /tmp/simplex.log 2>&1 &
+              else
+                $(find /tmp/squashfs-root -maxdepth 2 -type f -executable | head -1) --no-sandbox > /tmp/simplex.log 2>&1 &
+              fi
+              SIMPLEX_PID=$!
+            fi
+          fi
+          echo "SIMPLEX_PID=$SIMPLEX_PID" >> $GITHUB_ENV
+          sleep 30
+          if kill -0 $SIMPLEX_PID 2>/dev/null; then
+            echo "SimpleX Chat is running"
+          else
+            echo "SimpleX Chat failed to start"
+            cat /tmp/simplex.log | tail -30
+            exit 1
+          fi
+          scrot /tmp/01_app_started.png
+
+          # Handle initial profile creation if needed
+          # SimpleX Chat shows "Create your profile" on first launch
+          if xdotool search --name "SimpleX" > /dev/null 2>&1; then
+            echo "SimpleX window found"
+            WIN_ID=$(xdotool search --name "SimpleX" | head -1)
+            xdotool windowactivate $WIN_ID 2>/dev/null || true
+            sleep 2
+            # Click "Create your profile" button
+            # Try multiple positions (button location may vary)
+            for pos in "1350 700" "1200 750" "1400 680" "1100 720"; do
+              set -- $pos
+              xdotool mousemove $1 $2 click 1
+              sleep 3
+              # Check if screen changed (profile creation dialog appeared)
+              scrot /tmp/02_attempt_${pos// /_}.png
+            done
+            scrot /tmp/02_after_create_profile.png
+            echo "Profile creation attempted"
+          fi
+
+      - name: Create profile and capture
+        env:
+          DISPLAY: ':99'
+        run: |
+          sleep 5
+          scrot /tmp/02_before_profile.png
+          
+          # Click "Create your profile" button
+          # Button is on the right side, below the headline text
+          # Approximate coordinates for 1920x1080 resolution
+          # The button row is centered on the right 2/3 of the screen
+          # "Create your profile" is the right button in the pair
+          xdotool mousemove 1100 750 click 1
+          sleep 10
+          scrot /tmp/03_after_profile.png
+          echo "Profile creation attempted"
+          
+          # Take additional screenshots
+          sleep 5
+          scrot /tmp/04_main_screen.png
+          echo "Screenshots captured"
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: simplex-screenshots
+          path: /tmp/*.png
+          if-no-files-found: ignore
+
+      - name: Cleanup
+        if: always()
+        run: |
+          if [[ -n "${SIMPLEX_PID:-}" ]]; then
+            kill $SIMPLEX_PID 2>/dev/null || true
+          fi
+          pkill -f Xvfb 2>/dev/null || true
