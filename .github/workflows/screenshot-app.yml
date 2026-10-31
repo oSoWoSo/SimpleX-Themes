@@ -67,8 +67,8 @@ jobs:
         env:
           DISPLAY: ':99'
         run: |
-          # Try running directly (anylinux AppImage may not need extraction)
-          /tmp/simplex-chat.AppImage --no-sandbox > /tmp/simplex.log 2>&1 &
+          # Try running directly with --user-display-name to skip profile creation
+          /tmp/simplex-chat.AppImage --no-sandbox --user-display-name "CI_Test" > /tmp/simplex.log 2>&1 &
           SIMPLEX_PID=$!
           sleep 5
           if ! kill -0 $SIMPLEX_PID 2>/dev/null; then
@@ -77,9 +77,9 @@ jobs:
             cd /tmp && /tmp/simplex-chat.AppImage --appimage-extract > /tmp/extract.log 2>&1
             if [[ -d /tmp/squashfs-root ]]; then
               if [[ -f /tmp/squashfs-root/AppRun ]]; then
-                /tmp/squashfs-root/AppRun --no-sandbox > /tmp/simplex.log 2>&1 &
+                /tmp/squashfs-root/AppRun --no-sandbox --user-display-name "CI_Test" > /tmp/simplex.log 2>&1 &
               else
-                $(find /tmp/squashfs-root -maxdepth 2 -type f -executable | head -1) --no-sandbox > /tmp/simplex.log 2>&1 &
+                $(find /tmp/squashfs-root -maxdepth 2 -type f -executable | head -1) --no-sandbox --user-display-name "CI_Test" > /tmp/simplex.log 2>&1 &
               fi
               SIMPLEX_PID=$!
             fi
