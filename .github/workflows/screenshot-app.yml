@@ -117,19 +117,36 @@ jobs:
           sleep 5
           scrot /tmp/02_before_profile.png
           
-          # Click "Create your profile" button
-          # Button is on the right side, below the headline text
-          # Approximate coordinates for 1920x1080 resolution
-          # The button row is centered on the right 2/3 of the screen
-          # "Create your profile" is the right button in the pair
-          xdotool mousemove 1100 750 click 1
-          sleep 10
-          scrot /tmp/03_after_profile.png
-          echo "Profile creation attempted"
+          # Find SimpleX window and get its geometry
+          WIN_ID=$(xdotool search --name "SimpleX" | head -1)
+          if [[ -n "$WIN_ID" ]]; then
+            echo "Window ID: $WIN_ID"
+            xdotool getwindowgeometry $WIN_ID
+            # Get window position and size
+            eval $(xdotool getwindowgeometry --shell $WIN_ID)
+            echo "Window: X=$X Y=$Y WIDTH=$WIDTH HEIGHT=$HEIGHT"
+            # Calculate button position (center-right of window)
+            BTN_X=$((X + WIDTH * 2 / 3))
+            BTN_Y=$((Y + HEIGHT * 2 / 3))
+            echo "Calculated button position: $BTN_X, $BTN_Y"
+            # Click the button
+            xdotool mousemove $BTN_X $BTN_Y click 1
+            sleep 10
+            scrot /tmp/03_after_profile.png
+            # Try typing a profile name
+            RANDOM_NAME="CI_Test_$(date +%s)"
+            xdotool type "$RANDOM_NAME" 2>/dev/null || true
+            sleep 1
+            xdotool key Return 2>/dev/null || true
+            sleep 5
+            scrot /tmp/04_profile_created.png
+          else
+            echo "No SimpleX window found"
+          fi
           
           # Take additional screenshots
           sleep 5
-          scrot /tmp/04_main_screen.png
+          scrot /tmp/05_main_screen.png
           echo "Screenshots captured"
 
       - name: Upload screenshots
