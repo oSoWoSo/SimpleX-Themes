@@ -122,17 +122,14 @@ jobs:
             xdotool type "testpass123" 2>/dev/null || true
             sleep 1
             scrot /tmp/04b_passphrase_entered.png
-            # Tab to second field and type passphrase
-            xdotool key Tab 2>/dev/null || true
+            # Click on second field (below first field)
+            xdotool mousemove 960 480 click 1 2>/dev/null || true
             sleep 0.5
             xdotool type "testpass123" 2>/dev/null || true
             sleep 1
             scrot /tmp/04c_passphrase_confirmed.png
-            # Tab to "Set database passphrase" button
-            xdotool key Tab 2>/dev/null || true
-            sleep 1
-            # Press Enter to submit
-            xdotool key Return 2>/dev/null || true
+            # Click "Set database passphrase" button (bottom center)
+            xdotool mousemove 960 850 click 1 2>/dev/null || true
             sleep 5
             scrot /tmp/05_after_passphrase.png
             echo "Passphrase set"
